@@ -1,0 +1,143 @@
+{
+  "id": "test_story",
+  "title": "Engine Test Story",
+  "author": "System",
+  "version": "1.0.0",
+  "description": "A short story that exercises all engine features.",
+  "coverImage": "",
+  "startScene": "start",
+  "stateSchema": {
+    "health": { "initial": 100, "min": 0, "max": 100 },
+    "gold": { "initial": 10 },
+    "flags": {
+      "flag_a": false,
+      "flag_b": false
+    }
+  },
+  "scenes": {
+    "start": {
+      "id": "start",
+      "type": "normal",
+      "title": "Start",
+      "text": "Beginning of test story",
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "to_item_scene",
+          "text": "Go to item scene",
+          "nextScene": "item_scene",
+          "conditions": [],
+          "effects": [
+            { "type": "set_flag", "key": "flag_a", "value": true }
+          ]
+        }
+      ]
+    },
+    "item_scene": {
+      "id": "item_scene",
+      "type": "discovery",
+      "title": "Item Scene",
+      "text": "You find a knife",
+      "effectsOnEntry": [
+        { "type": "add_item", "key": "hunting_knife" }
+      ],
+      "choices": [
+        {
+          "id": "to_conditional_scene",
+          "text": "Continue",
+          "nextScene": "conditional_scene",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "conditional_scene": {
+      "id": "conditional_scene",
+      "type": "normal",
+      "title": "Conditional Scene",
+      "text": "A locked door",
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "hidden_choice",
+          "text": "Use the knife",
+          "nextScene": "good_ending",
+          "conditions": [
+            { "type": "has_item", "key": "hunting_knife" }
+          ],
+          "effects": [],
+          "hiddenIfConditionFails": true
+        },
+        {
+          "id": "always_visible",
+          "text": "Force the door",
+          "nextScene": "combat_scene",
+          "conditions": [],
+          "effects": [
+            { "type": "modify_stat", "key": "health", "value": -30 }
+          ]
+        }
+      ]
+    },
+    "combat_scene": {
+      "id": "combat_scene",
+      "type": "combat",
+      "title": "Combat",
+      "text": "You are attacked",
+      "effectsOnEntry": [
+        { "type": "modify_stat", "key": "health", "value": -80 }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "death_ending"
+      },
+      "choices": [
+        {
+          "id": "survive",
+          "text": "Survive",
+          "nextScene": "good_ending",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "good_ending": {
+      "id": "good_ending",
+      "type": "ending",
+      "endingType": "good",
+      "title": "Victory",
+      "text": "You win",
+      "effectsOnEntry": [],
+      "choices": []
+    },
+    "death_ending": {
+      "id": "death_ending",
+      "type": "ending",
+      "endingType": "death",
+      "title": "Death",
+      "text": "You die",
+      "effectsOnEntry": [],
+      "choices": [],
+      "retryOptions": {
+        "allowRetry": true,
+        "retryFromScene": "start",
+        "retryLabel": "Try Again"
+      }
+    }
+  },
+  "itemsRegistry": {
+    "hunting_knife": {
+      "id": "hunting_knife",
+      "displayName": "Hunting Knife",
+      "description": "A sharp blade",
+      "image": "",
+      "stackable": false
+    }
+  },
+  "imageConfig": {
+    "basePath": "assets/stories/test_story/images/",
+    "format": "png",
+    "fallbackImage": ""
+  }
+}

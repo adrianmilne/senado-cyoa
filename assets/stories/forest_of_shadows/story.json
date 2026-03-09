@@ -1,0 +1,253 @@
+{
+  "id": "forest_of_shadows",
+  "title": "Forest of Shadows",
+  "author": "CYOA Engine",
+  "version": "1.0.0",
+  "description": "Venture into the cursed Forest of Shadows and uncover its dark secrets.",
+  "coverImage": "",
+  "startScene": "forest_entrance",
+  "stateSchema": {
+    "health": { "initial": 100, "min": 0, "max": 100 },
+    "gold": { "initial": 20 },
+    "flags": {
+      "has_torch": false,
+      "met_hermit": false,
+      "found_shrine": false,
+      "took_amulet": false
+    }
+  },
+  "scenes": {
+    "forest_entrance": {
+      "id": "forest_entrance",
+      "type": "normal",
+      "title": "The Forest Entrance",
+      "text": "You stand before the Forest of Shadows. Ancient oaks twist overhead, their gnarled branches blotting out the sun. A worn path splits ahead — one trail leads deeper into the dark woods, the other skirts the forest edge toward a faint glow of firelight.",
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "enter_deep_forest",
+          "text": "Take the path into the deep forest",
+          "nextScene": "dark_path",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "go_to_firelight",
+          "text": "Head toward the firelight",
+          "nextScene": "hermit_camp",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "dark_path": {
+      "id": "dark_path",
+      "type": "normal",
+      "title": "The Dark Path",
+      "text": "The forest closes in around you. Without light, every shadow seems to move. You stumble over roots, losing precious energy. Up ahead you glimpse the outline of a ruined stone shrine.",
+      "effectsOnEntry": [
+        { "type": "modify_stat", "key": "health", "value": -10 }
+      ],
+      "choices": [
+        {
+          "id": "approach_shrine",
+          "text": "Approach the shrine",
+          "nextScene": "ruined_shrine",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "use_torch_on_path",
+          "text": "Light your torch and move cautiously",
+          "nextScene": "lit_path",
+          "conditions": [
+            { "type": "flag_is_true", "key": "has_torch" }
+          ],
+          "effects": [],
+          "hiddenIfConditionFails": true
+        }
+      ]
+    },
+    "hermit_camp": {
+      "id": "hermit_camp",
+      "type": "discovery",
+      "title": "The Hermit's Camp",
+      "text": "A weathered old hermit sits beside a crackling fire. His eyes, sharp beneath thick brows, assess you quickly. 'Few come to this forest by choice,' he rasps. 'Take this torch — you'll need it where the shadows are thickest.' He hands you a sturdy torch.",
+      "effectsOnEntry": [
+        { "type": "set_flag", "key": "met_hermit", "value": true },
+        { "type": "set_flag", "key": "has_torch", "value": true },
+        { "type": "add_item", "key": "torch" }
+      ],
+      "choices": [
+        {
+          "id": "ask_hermit_about_forest",
+          "text": "Ask the hermit about the forest",
+          "nextScene": "hermit_lore",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "thank_hermit_leave",
+          "text": "Thank him and head into the forest",
+          "nextScene": "dark_path",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "hermit_lore": {
+      "id": "hermit_lore",
+      "type": "normal",
+      "title": "The Hermit's Warning",
+      "text": "The hermit leans forward. 'There is a shrine deep within — the old gods were worshipped there. An amulet rests on the altar. Take it, and the forest spirits will hound you forever. Leave it, and they may show you a path out.' He stares into the flames and says no more.",
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "head_into_forest_after_lore",
+          "text": "Enter the forest",
+          "nextScene": "lit_path",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "lit_path": {
+      "id": "lit_path",
+      "type": "normal",
+      "title": "The Lit Path",
+      "text": "Torchlight pushes back the shadows. The forest feels less oppressive now, and you make better time without stumbling. The path leads to a clearing where the ruined shrine stands.",
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "go_to_shrine_lit",
+          "text": "Enter the shrine clearing",
+          "nextScene": "ruined_shrine",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "ruined_shrine": {
+      "id": "ruined_shrine",
+      "type": "discovery",
+      "title": "The Ruined Shrine",
+      "text": "Crumbling stone pillars surround a moss-covered altar. Atop it rests a dark amulet shaped like a crescent moon, pulsing with faint violet light. The air hums with an ancient power.",
+      "effectsOnEntry": [
+        { "type": "set_flag", "key": "found_shrine", "value": true }
+      ],
+      "choices": [
+        {
+          "id": "take_amulet",
+          "text": "Take the amulet",
+          "nextScene": "spirits_awaken",
+          "conditions": [],
+          "effects": [
+            { "type": "set_flag", "key": "took_amulet", "value": true },
+            { "type": "add_item", "key": "moon_amulet" }
+          ]
+        },
+        {
+          "id": "leave_amulet",
+          "text": "Leave the amulet and pay your respects",
+          "nextScene": "forest_spirits_guide",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "spirits_awaken": {
+      "id": "spirits_awaken",
+      "type": "combat",
+      "title": "The Spirits Awaken",
+      "text": "The moment your fingers close around the amulet, the shadows coil into shapes — hollow-eyed spirits that shriek and claw at you. You run, but their cold touch saps your strength.",
+      "effectsOnEntry": [
+        { "type": "modify_stat", "key": "health", "value": -40 }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "consumed_by_shadows"
+      },
+      "choices": [
+        {
+          "id": "flee_forest",
+          "text": "Flee the forest with the amulet",
+          "nextScene": "escaped_with_amulet",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "forest_spirits_guide": {
+      "id": "forest_spirits_guide",
+      "type": "normal",
+      "title": "Guided by Spirits",
+      "text": "Soft lights drift up from the altar — wisps, gentle and warm. They circle you slowly, then drift down a hidden path that was invisible moments ago. The forest parts before you as if grateful.",
+      "effectsOnEntry": [
+        { "type": "modify_stat", "key": "health", "value": 20 }
+      ],
+      "choices": [
+        {
+          "id": "follow_wisps",
+          "text": "Follow the wisps",
+          "nextScene": "safe_exit",
+          "conditions": [],
+          "effects": []
+        }
+      ]
+    },
+    "escaped_with_amulet": {
+      "id": "escaped_with_amulet",
+      "type": "ending",
+      "endingType": "neutral",
+      "title": "Escaped — At a Cost",
+      "text": "You burst out of the tree line, gasping. The amulet burns cold in your pocket. The forest spirits will never stop hunting you now — but the amulet is yours. For now.",
+      "effectsOnEntry": [],
+      "choices": []
+    },
+    "safe_exit": {
+      "id": "safe_exit",
+      "type": "ending",
+      "endingType": "good",
+      "title": "The Forest Parts",
+      "text": "The wisps lead you along a winding path that opens onto a sunlit meadow. You leave the Forest of Shadows behind, lighter somehow — and wiser. Some prizes are not worth taking.",
+      "effectsOnEntry": [],
+      "choices": []
+    },
+    "consumed_by_shadows": {
+      "id": "consumed_by_shadows",
+      "type": "ending",
+      "endingType": "death",
+      "title": "Consumed",
+      "text": "The spirits drag you down into the cold earth beneath the shrine. The forest swallows your screams. The amulet will wait for the next fool.",
+      "effectsOnEntry": [],
+      "choices": [],
+      "retryOptions": {
+        "allowRetry": true,
+        "retryFromScene": "forest_entrance",
+        "retryLabel": "Enter Again"
+      }
+    }
+  },
+  "itemsRegistry": {
+    "torch": {
+      "id": "torch",
+      "displayName": "Torch",
+      "description": "A sturdy wooden torch that keeps the shadows at bay.",
+      "image": "",
+      "stackable": false
+    },
+    "moon_amulet": {
+      "id": "moon_amulet",
+      "displayName": "Moon Amulet",
+      "description": "A crescent amulet that pulses with violet light. The spirits want it back.",
+      "image": "",
+      "stackable": false
+    }
+  },
+  "imageConfig": {
+    "basePath": "assets/stories/forest_of_shadows/images/",
+    "format": "png",
+    "fallbackImage": ""
+  }
+}
