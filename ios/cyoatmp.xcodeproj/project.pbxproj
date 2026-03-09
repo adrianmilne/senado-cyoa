@@ -20,7 +20,7 @@
 		13B07F961A680F5B00A75B9A /* cyoatmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cyoatmp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = cyoatmp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = cyoatmp/Info.plist; sourceTree = "<group>"; };
-		3AF124972215D74AA9EAEFA6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = cyoatmp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3AF124972215D74AA9EAEFA6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = cyoatmp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		3F0EFEC843C7F079AE8C5D52 /* libPods-cyoatmp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cyoatmp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68ED5FD913578FCB8BF15573 /* Pods-cyoatmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cyoatmp.release.xcconfig"; path = "Target Support Files/Pods-cyoatmp/Pods-cyoatmp.release.xcconfig"; sourceTree = "<group>"; };
 		6AF8CBBDDD62FD340FFC4405 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-cyoatmp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
@@ -73,7 +73,6 @@
 				EDF7E5D822CA7F67642400F7 /* Pods-cyoatmp.debug.xcconfig */,
 				68ED5FD913578FCB8BF15573 /* Pods-cyoatmp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -339,6 +338,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = cyoatmp/cyoatmp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VDY6DU32TK;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -357,7 +357,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adrianpmilne.cyoa-tmp";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adrianpmilne.senado-cyoa";
 				PRODUCT_NAME = cyoatmp;
 				SWIFT_OBJC_BRIDGING_HEADER = "cyoatmp/cyoatmp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -375,6 +375,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = cyoatmp/cyoatmp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VDY6DU32TK;
 				INFOPLIST_FILE = cyoatmp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -388,7 +389,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adrianpmilne.cyoa-tmp";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adrianpmilne.senado-cyoa";
 				PRODUCT_NAME = cyoatmp;
 				SWIFT_OBJC_BRIDGING_HEADER = "cyoatmp/cyoatmp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
