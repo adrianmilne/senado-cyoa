@@ -17,6 +17,13 @@ export interface HealthCheck {
   failScene: string;
 }
 
+export interface SceneImagePrompt {
+  subject?: string;
+  mood?: string;
+  shot?: string;
+  exclude?: string;
+}
+
 export interface RetryOptions {
   allowRetry: boolean;
   retryFromScene: string;
@@ -39,6 +46,7 @@ export interface Scene {
   title: string;
   text: string;
   image?: SceneImage;
+  imagePrompt?: SceneImagePrompt;
   effectsOnEntry: Effect[];
   choices: Choice[];
   healthCheck?: HealthCheck;

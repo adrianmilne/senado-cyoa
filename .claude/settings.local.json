@@ -61,7 +61,12 @@
       "Bash(sleep 15 && Read /private/tmp/claude-502/-Users-adge-Code-GitHub-senado-cyoa/tasks/b9hk8qc62.output 2>/dev/null)",
       "Bash(sleep 8 && curl -s http://localhost:8081/status 2>&1)",
       "Bash(sleep 5 && xcrun simctl io DB6DEA8A-9788-49D7-9D0F-3B0CE7A72484 screenshot /tmp/sim_screen.png && echo \"Screenshot saved\")",
-      "Bash(pkill -f \"react-native start\" 2>/dev/null; true)"
+      "Bash(pkill -f \"react-native start\" 2>/dev/null; true)",
+      "Bash(npm install expo-font @expo-google-fonts/unifraktur-maguntia @expo-google-fonts/crimson-text 2>&1 | tail -6)",
+      "Bash(npm install @expo-google-fonts/crimson-text 2>&1 | tail -4 && echo \"---\" && npm search \"@expo-google-fonts/unifraktur\" 2>&1 | head -10)",
+      "Bash(node node_modules/typescript/bin/tsc --noEmit 2>&1)",
+      "Bash(node -e \"const f = require\\('./node_modules/@expo-google-fonts/crimson-text'\\); const keys = Object.keys\\(f\\).filter\\(function\\(k\\){ return k.indexOf\\('__'\\) !== 0; }\\); console.log\\(keys\\);\" 2>&1)",
+      "Bash(npx jest --testPathPattern SchemaValidator 2>&1 | tail -15)"
     ]
   }
 }

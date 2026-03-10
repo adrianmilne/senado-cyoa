@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Scene } from '../models';
+import { Colors, Fonts } from '../theme';
 
 interface Props {
   scene: Scene;
@@ -8,37 +9,42 @@ interface Props {
   onMainMenu: () => void;
 }
 
-const endingColors: Record<string, string> = {
-  good: '#4CAF50',
-  neutral: '#FFC107',
-  death: '#F44336',
+const endingAccents: Record<string, string> = {
+  good: Colors.endingGood,
+  death: Colors.endingDeath,
+  neutral: Colors.endingNeutral,
+};
+
+const endingLabels: Record<string, string> = {
+  good: '✦ Victory ✦',
+  death: '✦ Slain ✦',
+  neutral: '✦ Fate Sealed ✦',
 };
 
 export function EndingPanel({ scene, onRetry, onMainMenu }: Props) {
-  const color = endingColors[scene.endingType ?? 'neutral'] ?? '#FFC107';
+  const accent = endingAccents[scene.endingType ?? 'neutral'] ?? Colors.endingNeutral;
+  const label = endingLabels[scene.endingType ?? 'neutral'] ?? '✦ End ✦';
 
   return (
     <View style={styles.container}>
-      <View style={[styles.badge, { borderColor: color }]}>
-        <Text style={[styles.endingLabel, { color }]}>
-          {scene.endingType?.toUpperCase() ?? 'END'}
-        </Text>
+      <View style={[styles.banner, { borderColor: accent }]}>
+        <Text style={[styles.endingLabel, { color: Colors.titleText }]}>{label}</Text>
       </View>
 
       {scene.retryOptions?.allowRetry && onRetry ? (
         <TouchableOpacity
-          style={[styles.button, { borderColor: color }]}
+          style={[styles.button, { borderColor: accent }]}
           onPress={() => onRetry(scene.retryOptions!.retryFromScene)}
           activeOpacity={0.7}
         >
-          <Text style={[styles.buttonText, { color }]}>
+          <Text style={[styles.buttonText, { color: Colors.titleText }]}>
             {scene.retryOptions.retryLabel}
           </Text>
         </TouchableOpacity>
       ) : null}
 
       <TouchableOpacity style={styles.menuButton} onPress={onMainMenu} activeOpacity={0.7}>
-        <Text style={styles.menuButtonText}>Main Menu</Text>
+        <Text style={styles.menuButtonText}>— Return to the Tavern —</Text>
       </TouchableOpacity>
     </View>
   );
@@ -47,36 +53,42 @@ export function EndingPanel({ scene, onRetry, onMainMenu }: Props) {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginTop: 32,
-    gap: 16,
+    marginTop: 40,
+    gap: 20,
   },
-  badge: {
-    borderWidth: 2,
-    borderRadius: 8,
-    paddingHorizontal: 24,
-    paddingVertical: 8,
+  banner: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.border,
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    alignSelf: 'stretch',
+    alignItems: 'center',
   },
   endingLabel: {
-    fontSize: 22,
-    fontWeight: '700',
-    letterSpacing: 3,
+    fontFamily: Fonts.title,
+    fontSize: 28,
+    letterSpacing: 2,
   },
   button: {
     borderWidth: 1,
-    borderRadius: 8,
+    borderStyle: 'dashed',
     paddingVertical: 12,
-    paddingHorizontal: 32,
+    paddingHorizontal: 40,
   },
   buttonText: {
+    fontFamily: Fonts.bodySemiBold,
     fontSize: 16,
-    fontWeight: '600',
+    letterSpacing: 1,
   },
   menuButton: {
     paddingVertical: 12,
     paddingHorizontal: 32,
   },
   menuButtonText: {
-    color: 'rgba(255,255,255,0.5)',
+    fontFamily: Fonts.body,
+    color: Colors.disabled,
     fontSize: 14,
+    letterSpacing: 1,
   },
 });

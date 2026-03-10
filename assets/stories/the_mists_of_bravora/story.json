@@ -1,0 +1,610 @@
+{
+  "id": "mist_of_bravora",
+  "title": "The Mist of Bravora",
+  "version": "1.0.0",
+  "author": "OpenAI",
+  "description": "In the mist-choked forests of Bravora, travellers vanish and ghost lights dance between the trees. You must uncover the truth before the Veil tears open.",
+  "coverImage": "",
+  "stateSchema": {
+    "health": {
+      "min": 0,
+      "max": 100,
+      "initial": 100
+    },
+    "gold": {
+      "initial": 5
+    },
+    "flags": {}
+  },
+  "imageConfig": {
+    "basePath": "assets/stories/the_mists_of_bravora/",
+    "format": "png",
+    "fallbackImage": "fallback.png"
+  },
+  "itemsRegistry": {
+    "woodsman_knife": {
+      "id": "woodsman_knife",
+      "name": "Woodsman's Knife",
+      "description": "A sturdy working blade, better for survival than glory.",
+      "stackable": false
+    },
+    "lantern_charm": {
+      "id": "lantern_charm",
+      "name": "Lantern Charm",
+      "description": "A small silver token etched with warding symbols against restless spirits.",
+      "stackable": false
+    },
+    "healing_herbs": {
+      "id": "healing_herbs",
+      "name": "Healing Herbs",
+      "description": "A fragrant bundle of mountain herbs. Restores 15 health when used.",
+      "stackable": true
+    },
+    "godstone_shard": {
+      "id": "godstone_shard",
+      "name": "Godstone Shard",
+      "description": "A fractured piece of black godstone that hums faintly near thin places in the Veil.",
+      "stackable": false
+    }
+  },
+  "startScene": "scene_001",
+  "scenes": {
+    "scene_001": {
+      "id": "scene_001",
+      "type": "normal",
+      "title": "The Road into Bravora",
+      "text": "The last village lies behind you. Ahead, the forest road bends into the Cinturao de Bruma, the Belt of Mist. Three merchants have vanished in as many weeks. The villagers speak of lanterns moving where no hands carry them, and of voices calling loved ones by name from deep among the trees.",
+      "image": {
+        "file": "images/scene_001.png",
+        "altText": "The Road into Bravora",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Rutted dirt road curving into a wall of grey-white mist between dense dark pines at dusk, no figures",
+        "mood": "foreboding",
+        "shot": "wide",
+        "exclude": "sunlight, people, animals"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "entered_bravora",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "choice_001a",
+          "text": "Search the roadside shrine before entering the forest",
+          "nextScene": "scene_002",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        },
+        {
+          "id": "choice_001b",
+          "text": "Follow the wagon tracks straight into the mist",
+          "nextScene": "scene_003",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_002": {
+      "id": "scene_002",
+      "type": "discovery",
+      "title": "The Shrine of Saint Lavrento",
+      "text": "Half-swallowed by moss and ivy, the little roadside shrine still holds offerings: candle stubs, dried flowers, and a forgotten satchel tucked behind the stone. Someone left in a hurry.",
+      "image": {
+        "file": "images/scene_002.png",
+        "altText": "The Shrine of Saint Lavrento",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Stone roadside shrine half-buried in ivy, burnt-down candle stubs and wilted dried flowers on the ledge, a worn leather satchel visible behind the base",
+        "mood": "desolate",
+        "shot": "close",
+        "exclude": "people"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "add_item",
+          "key": "woodsman_knife"
+        },
+        {
+          "type": "add_item",
+          "key": "lantern_charm"
+        },
+        {
+          "type": "set_flag",
+          "key": "found_shrine_supplies",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "choice_002a",
+          "text": "Take the path into the trees",
+          "nextScene": "scene_003",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_003": {
+      "id": "scene_003",
+      "type": "normal",
+      "title": "Ghost Lights",
+      "text": "The mist thickens until the trees are pale pillars in the gloom. Ahead, a lantern glimmers between the trunks. It sways gently, though there is no wind. Then another appears. And another.",
+      "image": {
+        "file": "images/scene_003.png",
+        "altText": "Ghost Lights",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Three faintly glowing points of amber light suspended between pale tree trunks in thick white mist, no visible source or chain",
+        "mood": "eerie",
+        "shot": "wide",
+        "exclude": "people, hands, lantern bodies"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "choice_003a",
+          "text": "Follow the lights",
+          "nextScene": "scene_004",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "set_flag",
+              "key": "followed_lights",
+              "value": true
+            }
+          ],
+          "hiddenIfConditionFails": false
+        },
+        {
+          "id": "choice_003b",
+          "text": "Ignore them and search for the missing caravan",
+          "nextScene": "scene_005",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "set_flag",
+              "key": "searched_caravan",
+              "value": true
+            }
+          ],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_004": {
+      "id": "scene_004",
+      "type": "combat",
+      "title": "The Weeping Spirit",
+      "text": "The lanterns gather in a clearing around the shape of a kneeling woman. When she lifts her face, it is hollow-eyed and streaked with black tears. She rises without bending her knees and drifts toward you with a sound like someone sobbing under water.",
+      "image": {
+        "file": "images/scene_004.png",
+        "altText": "The Weeping Spirit",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Translucent female figure rising rigidly from a forest clearing floor, face hollow-socketed with black tear streaks, lanterns circling at shoulder height",
+        "mood": "spectral",
+        "shot": "portrait",
+        "exclude": "warmth, colour, natural posture"
+      },
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 15,
+        "failScene": "scene_death"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -20
+        }
+      ],
+      "choices": [
+        {
+          "id": "choice_004a",
+          "text": "Hold up the lantern charm and speak a warding prayer",
+          "nextScene": "scene_006",
+          "conditions": [
+            {
+              "type": "has_item",
+              "key": "lantern_charm"
+            }
+          ],
+          "effects": [
+            {
+              "type": "set_flag",
+              "key": "spirit_warded",
+              "value": true
+            }
+          ],
+          "hiddenIfConditionFails": false,
+          "conditionFailMessage": "You have nothing to ward the spirit with."
+        },
+        {
+          "id": "choice_004b",
+          "text": "Fight through it with your blade",
+          "nextScene": "scene_006",
+          "conditions": [
+            {
+              "type": "has_item",
+              "key": "woodsman_knife"
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -15
+            },
+            {
+              "type": "set_flag",
+              "key": "spirit_fought",
+              "value": true
+            }
+          ],
+          "hiddenIfConditionFails": false,
+          "conditionFailMessage": "You need a weapon to stand your ground."
+        },
+        {
+          "id": "choice_004c",
+          "text": "Run from the clearing",
+          "nextScene": "scene_005",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -5
+            }
+          ],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_005": {
+      "id": "scene_005",
+      "type": "discovery",
+      "title": "The Broken Caravan",
+      "text": "You find the missing caravan where the road disappears beneath roots and marsh water. The wagons are split open from within. Among scattered cloth and smashed crates lies a dead carter clutching a jagged black shard. Even now, it pulses with cold.",
+      "image": {
+        "file": "scene_005.png",
+        "altText": "A broken caravan abandoned in a haunted forest",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Two splintered wagons half-submerged in black marsh water, broken crates and scattered cloth, a jagged dark shard visible among the debris",
+        "mood": "bleak",
+        "shot": "wide",
+        "exclude": "living people"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "add_item",
+          "key": "godstone_shard"
+        },
+        {
+          "type": "modify_stat",
+          "key": "gold",
+          "value": 12
+        },
+        {
+          "type": "set_flag",
+          "key": "found_caravan",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "choice_005a",
+          "text": "Take the shard and follow its pull deeper into the forest",
+          "nextScene": "scene_006",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        },
+        {
+          "id": "choice_005b",
+          "text": "Gather healing herbs before moving on",
+          "nextScene": "scene_005b",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_005b": {
+      "id": "scene_005b",
+      "type": "discovery",
+      "title": "Herbs at the Water's Edge",
+      "text": "Near the marsh, you spot silverleaf and blood-mint growing between stones. Old Bravoran remedies. You gather what you can before the mist closes in again.",
+      "imagePrompt": {
+        "subject": "Pale silver-leafed and deep red-stemmed herbs growing in cracks between wet stones at a dark marsh edge, mist curling close",
+        "mood": "desolate",
+        "shot": "close"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "add_item",
+          "key": "healing_herbs"
+        },
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": 10
+        },
+        {
+          "type": "set_flag",
+          "key": "gathered_herbs",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "choice_005b_a",
+          "text": "Continue deeper into the forest",
+          "nextScene": "scene_006",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        }
+      ],
+      "image": {
+        "file": "images/scene_005b.png",
+        "altText": "Herbs at the Water's Edge",
+        "position": "top"
+      }
+    },
+    "scene_006": {
+      "id": "scene_006",
+      "type": "normal",
+      "title": "The Sunken Ruin",
+      "text": "At last you reach a ring of ancient stones sinking into black earth. Vines coil over weathered carvings older than Corsava itself. In the centre stands a broken arch of godstone, cracked but not dead. Beyond its hollow frame, the air shimmers like oil on water. This is no village ghost story. It is a Veilgate.",
+      "image": {
+        "file": "images/scene_006.png",
+        "altText": "The Sunken Ruin",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Ring of lichen-covered standing stones tilting into black earth, cracked obsidian arch at centre with shimmering distorted air inside its frame, no figures",
+        "mood": "haunted",
+        "shot": "wide",
+        "exclude": "people, natural light"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "found_veilgate",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "choice_006a",
+          "text": "Use the lantern charm to attempt a warding seal",
+          "nextScene": "scene_007",
+          "conditions": [
+            {
+              "type": "has_item",
+              "key": "lantern_charm"
+            }
+          ],
+          "effects": [],
+          "hiddenIfConditionFails": false,
+          "conditionFailMessage": "You lack any proper warding tool."
+        },
+        {
+          "id": "choice_006b",
+          "text": "Drive the godstone shard into the broken arch",
+          "nextScene": "scene_008",
+          "conditions": [
+            {
+              "type": "has_item",
+              "key": "godstone_shard"
+            }
+          ],
+          "effects": [],
+          "hiddenIfConditionFails": false,
+          "conditionFailMessage": "You need something linked to the Veilgate itself."
+        },
+        {
+          "id": "choice_006c",
+          "text": "Step through the shimmering threshold",
+          "nextScene": "scene_009",
+          "conditions": [],
+          "effects": [],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_007": {
+      "id": "scene_007",
+      "type": "ending",
+      "endingType": "good",
+      "title": "The Gate is Quieted",
+      "text": "You raise the charm and speak the words etched upon it. The clearing grows still. One by one, the ghost lights gutter out. The cracked arch groans, then hardens into lifeless stone. At dawn, the mist begins to thin over Bravora. The villagers will call it a miracle. You know it was only a temporary mercy, but for now the road is safe again.",
+      "image": {
+        "file": "images/scene_007.png",
+        "altText": "The Gate is Quieted",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Cracked stone arch standing inert and dark in a clearing at grey dawn, mist beginning to disperse, all lights extinguished",
+        "mood": "desolate",
+        "shot": "wide",
+        "exclude": "people, glow, shimmer"
+      },
+      "effectsOnEntry": [],
+      "choices": []
+    },
+    "scene_008": {
+      "id": "scene_008",
+      "type": "ending",
+      "endingType": "good",
+      "title": "The Wound is Bound",
+      "text": "You press the godstone shard into the fractured arch. For a heartbeat the ruin screams. Then the shimmer collapses inward, as though the air itself has been stitched shut. The effort leaves your hands numb and your thoughts haunted by whispers, but the Veilgate is bound. Somewhere beyond sight, something has noticed you.",
+      "image": {
+        "file": "images/scene_008.png",
+        "altText": "The Wound is Bound",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Cracked obsidian arch with a dark shard driven into its split centre, the shimmering air inside collapsing to a single black point",
+        "mood": "dread",
+        "shot": "close",
+        "exclude": "people, warm light"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "marked_by_the_veil",
+          "value": true
+        }
+      ],
+      "choices": []
+    },
+    "scene_009": {
+      "id": "scene_009",
+      "type": "combat",
+      "title": "Beyond the Veil",
+      "text": "You step into a world that is and is not the forest. The trees are twisted into impossible shapes, and distant lights drift like souls at sea. A shadow moves toward you across the silver marsh, wearing the face of one of the missing merchants. Its mouth opens too wide.",
+      "image": {
+        "file": "images/scene_009.png",
+        "altText": "Beyond the Veil",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Mirror-world forest with impossibly bent black trees over a silver reflective marsh, a tall shadow-figure in the distance bearing a human face with a jaw unhinged too wide",
+        "mood": "spectral",
+        "shot": "wide",
+        "exclude": "colour, natural tree shapes"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -25
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 30,
+        "failScene": "scene_death"
+      },
+      "choices": [
+        {
+          "id": "choice_009a",
+          "text": "Stand and fight the thing wearing a dead man's face",
+          "nextScene": "scene_010",
+          "conditions": [
+            {
+              "type": "has_item",
+              "key": "woodsman_knife"
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -15
+            }
+          ],
+          "hiddenIfConditionFails": false,
+          "conditionFailMessage": "You have no weapon and no hope of surviving the attack."
+        },
+        {
+          "id": "choice_009b",
+          "text": "Flee back through the gate while you still can",
+          "nextScene": "scene_011",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -10
+            }
+          ],
+          "hiddenIfConditionFails": false
+        }
+      ]
+    },
+    "scene_010": {
+      "id": "scene_010",
+      "type": "ending",
+      "endingType": "death",
+      "title": "Lost Between Worlds",
+      "text": "You wound the creature, but the Afterworld is not a place where courage alone is enough. The marsh rises around your legs like hands, and the lights close over you. In Bravora, the villagers will one day speak of another lantern in the trees.",
+      "image": {
+        "file": "images/scene_010.png",
+        "altText": "Lost Between Worlds",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Figure sinking to the waist in silver marsh water, ghostly lights descending to encircle them, dark shapeless sky above",
+        "mood": "bleak",
+        "shot": "portrait",
+        "exclude": "warm colour, hope"
+      },
+      "effectsOnEntry": [],
+      "retryOptions": {
+        "allowRetry": true,
+        "retryFromScene": "scene_001",
+        "retryLabel": "Begin Again"
+      },
+      "choices": []
+    },
+    "scene_011": {
+      "id": "scene_011",
+      "type": "ending",
+      "endingType": "neutral",
+      "title": "The Road Remains Cursed",
+      "text": "You throw yourself back through the Veilgate as the clearing erupts with shrieking wind. The ruin falls silent, but not sealed. You escape with your life and enough truth to warn the villagers away, yet the mist in Bravora will claim more souls before anyone dares return. Some evils are discovered, not defeated.",
+      "image": {
+        "file": "images/scene_011.png",
+        "altText": "The Road Remains Cursed",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Lone cloaked figure scrambling away from a stone ruin at night, wind-bent grass and leaves swirling around them, the ruin dark and silent behind",
+        "mood": "foreboding",
+        "shot": "wide"
+      },
+      "effectsOnEntry": [],
+      "choices": []
+    },
+    "scene_death": {
+      "id": "scene_death",
+      "type": "ending",
+      "endingType": "death",
+      "title": "Claimed by the Mist",
+      "text": "Your strength fails you in the dark between the trees. By morning there is no trace of you on the road into Bravora, only drifting mist and the faint glow of distant lanterns.",
+      "image": {
+        "file": "images/scene_death.png",
+        "altText": "Claimed by the Mist",
+        "position": "top"
+      },
+      "imagePrompt": {
+        "subject": "Empty forest road vanishing into absolute white mist, faint amber pinpricks of lantern light deep within, no footprints, no figure",
+        "mood": "bleak",
+        "shot": "wide",
+        "exclude": "people, warmth"
+      },
+      "effectsOnEntry": [],
+      "retryOptions": {
+        "allowRetry": true,
+        "retryFromScene": "scene_001",
+        "retryLabel": "Try Again"
+      },
+      "choices": []
+    }
+  }
+}

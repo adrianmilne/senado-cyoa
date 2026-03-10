@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { GameState } from '../models';
+import { Colors, Fonts } from '../theme';
 
 interface Props {
   gameState: GameState;
@@ -8,22 +9,22 @@ interface Props {
 
 export function StatsBar({ gameState }: Props) {
   const healthPct = Math.max(0, Math.min(100, gameState.health));
-  const barColor =
-    healthPct > 50 ? '#4CAF50' : healthPct > 25 ? '#FFC107' : '#F44336';
 
   return (
     <View style={styles.container}>
-      <View style={styles.healthSection}>
-        <Text style={styles.label}>HP</Text>
+      <View style={styles.woundsSection}>
+        <Text style={styles.label}>Wounds</Text>
         <View style={styles.barTrack}>
-          <View style={[styles.barFill, { width: `${healthPct}%`, backgroundColor: barColor }]} />
+          <View style={[styles.barFill, { width: `${healthPct}%` }]} />
         </View>
         <Text style={styles.statText}>{gameState.health}</Text>
       </View>
+      <View style={styles.divider} />
       <View style={styles.statItem}>
-        <Text style={styles.label}>Gold</Text>
+        <Text style={styles.label}>Crowns</Text>
         <Text style={styles.statText}>{gameState.gold}</Text>
       </View>
+      <View style={styles.divider} />
       <View style={styles.statItem}>
         <Text style={styles.label}>Items</Text>
         <Text style={styles.statText}>{gameState.inventory.length}</Text>
@@ -36,12 +37,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#12122A',
+    backgroundColor: Colors.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    gap: 16,
+    gap: 12,
   },
-  healthSection: {
+  woundsSection: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -49,27 +52,34 @@ const styles = StyleSheet.create({
   },
   barTrack: {
     flex: 1,
-    height: 8,
-    backgroundColor: '#2D2D44',
-    borderRadius: 4,
-    overflow: 'hidden',
+    height: 6,
+    backgroundColor: '#0D0000',
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   barFill: {
     height: '100%',
-    borderRadius: 4,
+    backgroundColor: Colors.healthBar,
+  },
+  divider: {
+    width: 1,
+    height: 20,
+    backgroundColor: Colors.border,
   },
   statItem: {
     alignItems: 'center',
+    gap: 2,
   },
   label: {
-    color: '#FFC107',
+    fontFamily: Fonts.body,
+    color: Colors.border,
     fontSize: 11,
-    fontWeight: '600',
     textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   statText: {
-    color: 'rgba(255,255,255,0.75)',
+    fontFamily: Fonts.bodySemiBold,
+    color: Colors.titleText,
     fontSize: 14,
-    fontWeight: '500',
   },
 });

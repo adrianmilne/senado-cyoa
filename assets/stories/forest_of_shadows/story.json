@@ -7,8 +7,14 @@
   "coverImage": "",
   "startScene": "forest_entrance",
   "stateSchema": {
-    "health": { "initial": 100, "min": 0, "max": 100 },
-    "gold": { "initial": 20 },
+    "health": {
+      "initial": 100,
+      "min": 0,
+      "max": 100
+    },
+    "gold": {
+      "initial": 20
+    },
     "flags": {
       "has_torch": false,
       "met_hermit": false,
@@ -22,6 +28,12 @@
       "type": "normal",
       "title": "The Forest Entrance",
       "text": "You stand before the Forest of Shadows. Ancient oaks twist overhead, their gnarled branches blotting out the sun. A worn path splits ahead — one trail leads deeper into the dark woods, the other skirts the forest edge toward a faint glow of firelight.",
+      "imagePrompt": {
+        "subject": "Towering gnarled oaks forming a dark archway over a split dirt path, canopy blocking all sky",
+        "mood": "foreboding",
+        "shot": "wide",
+        "exclude": "sunlight, people"
+      },
       "effectsOnEntry": [],
       "choices": [
         {
@@ -38,15 +50,30 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/forest_entrance.png",
+        "altText": "The Forest Entrance",
+        "position": "top"
+      }
     },
     "dark_path": {
       "id": "dark_path",
       "type": "normal",
       "title": "The Dark Path",
       "text": "The forest closes in around you. Without light, every shadow seems to move. You stumble over roots, losing precious energy. Up ahead you glimpse the outline of a ruined stone shrine.",
+      "imagePrompt": {
+        "subject": "Narrow forest track choked with roots and undergrowth, distant crumbled stone shape barely visible in darkness",
+        "mood": "oppressive",
+        "shot": "wide",
+        "exclude": "torchlight, clear sky"
+      },
       "effectsOnEntry": [
-        { "type": "modify_stat", "key": "health", "value": -10 }
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -10
+        }
       ],
       "choices": [
         {
@@ -61,22 +88,46 @@
           "text": "Light your torch and move cautiously",
           "nextScene": "lit_path",
           "conditions": [
-            { "type": "flag_is_true", "key": "has_torch" }
+            {
+              "type": "flag_is_true",
+              "key": "has_torch"
+            }
           ],
           "effects": [],
           "hiddenIfConditionFails": true
         }
-      ]
+      ],
+      "image": {
+        "file": "images/dark_path.png",
+        "altText": "The Dark Path",
+        "position": "top"
+      }
     },
     "hermit_camp": {
       "id": "hermit_camp",
       "type": "discovery",
       "title": "The Hermit's Camp",
       "text": "A weathered old hermit sits beside a crackling fire. His eyes, sharp beneath thick brows, assess you quickly. 'Few come to this forest by choice,' he rasps. 'Take this torch — you'll need it where the shadows are thickest.' He hands you a sturdy torch.",
+      "imagePrompt": {
+        "subject": "Gaunt old man with deep-set eyes seated at a small campfire, handing a torch across the flames, dark forest behind him",
+        "mood": "tenebrous",
+        "shot": "portrait"
+      },
       "effectsOnEntry": [
-        { "type": "set_flag", "key": "met_hermit", "value": true },
-        { "type": "set_flag", "key": "has_torch", "value": true },
-        { "type": "add_item", "key": "torch" }
+        {
+          "type": "set_flag",
+          "key": "met_hermit",
+          "value": true
+        },
+        {
+          "type": "set_flag",
+          "key": "has_torch",
+          "value": true
+        },
+        {
+          "type": "add_item",
+          "key": "torch"
+        }
       ],
       "choices": [
         {
@@ -93,13 +144,23 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/hermit_camp.png",
+        "altText": "The Hermit's Camp",
+        "position": "top"
+      }
     },
     "hermit_lore": {
       "id": "hermit_lore",
       "type": "normal",
       "title": "The Hermit's Warning",
       "text": "The hermit leans forward. 'There is a shrine deep within — the old gods were worshipped there. An amulet rests on the altar. Take it, and the forest spirits will hound you forever. Leave it, and they may show you a path out.' He stares into the flames and says no more.",
+      "imagePrompt": {
+        "subject": "Weathered old man's face close, firelight casting deep shadows across hollow cheeks, fixed stare into flames",
+        "mood": "haunted",
+        "shot": "close"
+      },
       "effectsOnEntry": [],
       "choices": [
         {
@@ -109,13 +170,23 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/hermit_lore.png",
+        "altText": "The Hermit's Warning",
+        "position": "top"
+      }
     },
     "lit_path": {
       "id": "lit_path",
       "type": "normal",
       "title": "The Lit Path",
       "text": "Torchlight pushes back the shadows. The forest feels less oppressive now, and you make better time without stumbling. The path leads to a clearing where the ruined shrine stands.",
+      "imagePrompt": {
+        "subject": "Forest path lit by a single torch, warm orange light pushing back dense shadow on either side, shrine clearing ahead",
+        "mood": "eerie",
+        "shot": "wide"
+      },
       "effectsOnEntry": [],
       "choices": [
         {
@@ -125,15 +196,30 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/lit_path.png",
+        "altText": "The Lit Path",
+        "position": "top"
+      }
     },
     "ruined_shrine": {
       "id": "ruined_shrine",
       "type": "discovery",
       "title": "The Ruined Shrine",
       "text": "Crumbling stone pillars surround a moss-covered altar. Atop it rests a dark amulet shaped like a crescent moon, pulsing with faint violet light. The air hums with an ancient power.",
+      "imagePrompt": {
+        "subject": "Moss-encrusted stone altar between broken pillars, crescent amulet emitting faint dim light on the altar surface",
+        "mood": "haunted",
+        "shot": "wide",
+        "exclude": "people, animals"
+      },
       "effectsOnEntry": [
-        { "type": "set_flag", "key": "found_shrine", "value": true }
+        {
+          "type": "set_flag",
+          "key": "found_shrine",
+          "value": true
+        }
       ],
       "choices": [
         {
@@ -142,8 +228,15 @@
           "nextScene": "spirits_awaken",
           "conditions": [],
           "effects": [
-            { "type": "set_flag", "key": "took_amulet", "value": true },
-            { "type": "add_item", "key": "moon_amulet" }
+            {
+              "type": "set_flag",
+              "key": "took_amulet",
+              "value": true
+            },
+            {
+              "type": "add_item",
+              "key": "moon_amulet"
+            }
           ]
         },
         {
@@ -153,15 +246,30 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/ruined_shrine.png",
+        "altText": "The Ruined Shrine",
+        "position": "top"
+      }
     },
     "spirits_awaken": {
       "id": "spirits_awaken",
       "type": "combat",
       "title": "The Spirits Awaken",
       "text": "The moment your fingers close around the amulet, the shadows coil into shapes — hollow-eyed spirits that shriek and claw at you. You run, but their cold touch saps your strength.",
+      "imagePrompt": {
+        "subject": "Writhing shadow-forms with hollow white eyes surging up from the ground around a fleeing figure clutching a glowing crescent",
+        "mood": "dread",
+        "shot": "wide",
+        "exclude": "colour, warmth"
+      },
       "effectsOnEntry": [
-        { "type": "modify_stat", "key": "health", "value": -40 }
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -40
+        }
       ],
       "healthCheck": {
         "stat": "health",
@@ -176,15 +284,29 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/spirits_awaken.png",
+        "altText": "The Spirits Awaken",
+        "position": "top"
+      }
     },
     "forest_spirits_guide": {
       "id": "forest_spirits_guide",
       "type": "normal",
       "title": "Guided by Spirits",
       "text": "Soft lights drift up from the altar — wisps, gentle and warm. They circle you slowly, then drift down a hidden path that was invisible moments ago. The forest parts before you as if grateful.",
+      "imagePrompt": {
+        "subject": "Small pale wisps rising from a stone altar and drifting toward a narrow gap opening in the dark treeline",
+        "mood": "spectral",
+        "shot": "wide"
+      },
       "effectsOnEntry": [
-        { "type": "modify_stat", "key": "health", "value": 20 }
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": 20
+        }
       ],
       "choices": [
         {
@@ -194,7 +316,12 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/forest_spirits_guide.png",
+        "altText": "Guided by Spirits",
+        "position": "top"
+      }
     },
     "escaped_with_amulet": {
       "id": "escaped_with_amulet",
@@ -202,8 +329,18 @@
       "endingType": "neutral",
       "title": "Escaped — At a Cost",
       "text": "You burst out of the tree line, gasping. The amulet burns cold in your pocket. The forest spirits will never stop hunting you now — but the amulet is yours. For now.",
+      "imagePrompt": {
+        "subject": "Ragged figure stumbling out of a black treeline onto open ground at night, hand clutching coat pocket",
+        "mood": "bleak",
+        "shot": "portrait"
+      },
       "effectsOnEntry": [],
-      "choices": []
+      "choices": [],
+      "image": {
+        "file": "images/escaped_with_amulet.png",
+        "altText": "Escaped — At a Cost",
+        "position": "top"
+      }
     },
     "safe_exit": {
       "id": "safe_exit",
@@ -211,8 +348,18 @@
       "endingType": "good",
       "title": "The Forest Parts",
       "text": "The wisps lead you along a winding path that opens onto a sunlit meadow. You leave the Forest of Shadows behind, lighter somehow — and wiser. Some prizes are not worth taking.",
+      "imagePrompt": {
+        "subject": "Narrow winding path emerging from dense dark forest onto open pale grassland, solitary figure at threshold",
+        "mood": "desolate",
+        "shot": "wide"
+      },
       "effectsOnEntry": [],
-      "choices": []
+      "choices": [],
+      "image": {
+        "file": "images/safe_exit.png",
+        "altText": "The Forest Parts",
+        "position": "top"
+      }
     },
     "consumed_by_shadows": {
       "id": "consumed_by_shadows",
@@ -220,12 +367,23 @@
       "endingType": "death",
       "title": "Consumed",
       "text": "The spirits drag you down into the cold earth beneath the shrine. The forest swallows your screams. The amulet will wait for the next fool.",
+      "imagePrompt": {
+        "subject": "Grasping shadow-hands pulling a figure down into cracked earth beneath a shrine altar, darkness absolute above",
+        "mood": "dread",
+        "shot": "portrait",
+        "exclude": "light sources, colour"
+      },
       "effectsOnEntry": [],
       "choices": [],
       "retryOptions": {
         "allowRetry": true,
         "retryFromScene": "forest_entrance",
         "retryLabel": "Enter Again"
+      },
+      "image": {
+        "file": "images/consumed_by_shadows.png",
+        "altText": "Consumed",
+        "position": "top"
       }
     }
   },
@@ -246,7 +404,7 @@
     }
   },
   "imageConfig": {
-    "basePath": "assets/stories/forest_of_shadows/images/",
+    "basePath": "assets/stories/forest_of_shadows/",
     "format": "png",
     "fallbackImage": ""
   }

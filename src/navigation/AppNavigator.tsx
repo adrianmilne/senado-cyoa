@@ -1,11 +1,18 @@
 import React from 'react';
+import { Animated } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  createStackNavigator,
+  StackCardInterpolationProps,
+  StackCardInterpolatedStyle,
+} from '@react-navigation/stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 import { store } from '../engine/StateManager';
 import { HomeScreen } from '../screens/HomeScreen';
 import { StorySelectScreen } from '../screens/StorySelectScreen';
 import { SceneScreen } from '../screens/SceneScreen';
+import { Colors } from '../theme';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -16,7 +23,15 @@ export type RootStackParamList = {
 export type { RootState, AppDispatch } from '../engine/StateManager';
 export { store } from '../engine/StateManager';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+function forFade({ current }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  return {
+    cardStyle: {
+      opacity: current.progress as unknown as Animated.AnimatedInterpolation<number>,
+    },
+  };
+}
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 function Navigator() {
   return (
@@ -25,8 +40,13 @@ function Navigator() {
         initialRouteName="Home"
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: '#1A1A2E' },
-          animation: 'fade',
+          cardStyle: { backgroundColor: Colors.background },
+          gestureEnabled: false,
+          transitionSpec: {
+            open: { animation: 'timing', config: { duration: 600 } },
+            close: { animation: 'timing', config: { duration: 600 } },
+          },
+          cardStyleInterpolator: forFade,
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -40,7 +60,9 @@ function Navigator() {
 export function AppNavigator() {
   return (
     <Provider store={store}>
-      <Navigator />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Navigator />
+      </GestureHandlerRootView>
     </Provider>
   );
 }

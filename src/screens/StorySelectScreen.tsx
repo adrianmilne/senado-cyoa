@@ -8,24 +8,26 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch } from 'react-redux';
 import { Story } from '../models';
 import { startStory, resumeSave } from '../engine/StateManager';
 import { SaveService } from '../services/SaveService';
 import { validateStory } from '../services/SchemaValidator';
 import { AppDispatch, RootStackParamList } from '../navigation/AppNavigator';
+import { Colors, Fonts } from '../theme';
 
-// Bundled stories — add new story JSON imports here
 const STORY_MODULES: Record<string, Story> = {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   test_story: require('../../assets/stories/test_story/story.json') as Story,
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   forest_of_shadows: require('../../assets/stories/forest_of_shadows/story.json') as Story,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  mist_of_bravora: require('../../assets/stories/the_mists_of_bravora/story.json') as Story,
 };
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'StorySelect'>;
+  navigation: StackNavigationProp<RootStackParamList, 'StorySelect'>;
 };
 
 export function StorySelectScreen({ navigation }: Props) {
@@ -38,7 +40,6 @@ export function StorySelectScreen({ navigation }: Props) {
     const load = async () => {
       const valid: Story[] = [];
       const saves: Record<string, boolean> = {};
-
       for (const story of Object.values(STORY_MODULES)) {
         const errors = validateStory(story);
         if (errors.length === 0) {
@@ -46,7 +47,6 @@ export function StorySelectScreen({ navigation }: Props) {
           saves[story.id] = await SaveService.hasSave(story.id);
         }
       }
-
       setStories(valid);
       setHasSave(saves);
       setLoading(false);
@@ -70,14 +70,14 @@ export function StorySelectScreen({ navigation }: Props) {
   if (loading) {
     return (
       <SafeAreaView style={styles.safe}>
-        <ActivityIndicator color="#FFC107" size="large" style={styles.loader} />
+        <ActivityIndicator color={Colors.titleText} size="large" style={styles.loader} />
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.safe}>
-      <Text style={styles.heading}>Choose a Story</Text>
+      <Text style={styles.heading}>─── ✦ Choose Your Tale ✦ ───</Text>
       <FlatList
         data={stories}
         keyExtractor={s => s.id}
@@ -85,27 +85,28 @@ export function StorySelectScreen({ navigation }: Props) {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Text style={styles.storyTitle}>{item.title}</Text>
+            <View style={styles.cardDivider} />
             <Text style={styles.storyDesc}>{item.description}</Text>
             {item.metadata ? (
               <Text style={styles.meta}>
-                ~{item.metadata.estimatedPlaytimeMinutes} min · {item.metadata.difficulty}
+                {item.metadata.difficulty} · ~{item.metadata.estimatedPlaytimeMinutes} min
               </Text>
             ) : null}
             <View style={styles.cardActions}>
               <TouchableOpacity
-                style={styles.playButton}
+                style={styles.primaryButton}
                 onPress={() => handleNewGame(item)}
-                activeOpacity={0.8}
+                activeOpacity={0.7}
               >
-                <Text style={styles.playButtonText}>New Game</Text>
+                <Text style={styles.primaryButtonText}>✦ New Game</Text>
               </TouchableOpacity>
               {hasSave[item.id] ? (
                 <TouchableOpacity
-                  style={styles.resumeButton}
+                  style={styles.secondaryButton}
                   onPress={() => handleResume(item)}
-                  activeOpacity={0.8}
+                  activeOpacity={0.7}
                 >
-                  <Text style={styles.resumeButtonText}>Resume</Text>
+                  <Text style={styles.secondaryButtonText}>Continue</Text>
                 </TouchableOpacity>
               ) : null}
             </View>
@@ -119,70 +120,84 @@ export function StorySelectScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Colors.background,
   },
   loader: {
     flex: 1,
     justifyContent: 'center',
   },
   heading: {
-    color: '#FFC107',
-    fontSize: 26,
-    fontWeight: '700',
+    fontFamily: Fonts.title,
+    color: Colors.titleText,
+    fontSize: 20,
     textAlign: 'center',
-    paddingVertical: 20,
+    paddingVertical: 24,
+    letterSpacing: 1,
   },
   list: {
     paddingHorizontal: 16,
-    paddingBottom: 24,
+    paddingBottom: 32,
     gap: 16,
   },
   card: {
-    backgroundColor: '#2D2D44',
-    borderRadius: 12,
-    padding: 16,
-    gap: 8,
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    padding: 20,
+    gap: 10,
+  },
+  cardDivider: {
+    height: 1,
+    backgroundColor: Colors.border,
+    opacity: 0.4,
   },
   storyTitle: {
-    color: '#FFC107',
-    fontSize: 20,
-    fontWeight: '700',
+    fontFamily: Fonts.title,
+    color: Colors.titleText,
+    fontSize: 26,
+    letterSpacing: 1,
   },
   storyDesc: {
-    color: 'rgba(255,255,255,0.75)',
-    fontSize: 14,
-    lineHeight: 20,
+    fontFamily: Fonts.body,
+    color: Colors.bodyText,
+    fontSize: 16,
+    lineHeight: 26,
+    fontStyle: 'italic',
   },
   meta: {
-    color: 'rgba(255,255,255,0.4)',
-    fontSize: 12,
+    fontFamily: Fonts.body,
+    color: Colors.disabled,
+    fontSize: 13,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   cardActions: {
     flexDirection: 'row',
     gap: 12,
     marginTop: 8,
   },
-  playButton: {
-    backgroundColor: '#FFC107',
-    borderRadius: 8,
+  primaryButton: {
+    backgroundColor: Colors.accent,
     paddingVertical: 10,
     paddingHorizontal: 24,
   },
-  playButtonText: {
-    color: '#1A1A2E',
-    fontWeight: '700',
+  primaryButtonText: {
+    fontFamily: Fonts.bodySemiBold,
+    color: Colors.titleText,
     fontSize: 14,
+    letterSpacing: 1,
   },
-  resumeButton: {
+  secondaryButton: {
     borderWidth: 1,
-    borderColor: '#FFC107',
-    borderRadius: 8,
+    borderColor: Colors.border,
+    borderStyle: 'dashed',
     paddingVertical: 10,
     paddingHorizontal: 24,
   },
-  resumeButtonText: {
-    color: '#FFC107',
-    fontWeight: '600',
+  secondaryButtonText: {
+    fontFamily: Fonts.body,
+    color: Colors.bodyText,
     fontSize: 14,
+    letterSpacing: 1,
   },
 });

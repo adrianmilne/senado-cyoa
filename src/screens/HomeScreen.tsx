@@ -6,25 +6,30 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { Colors, Fonts } from '../theme';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 export function HomeScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <Text style={styles.title}>Choose Your{'\n'}Adventure</Text>
-        <Text style={styles.subtitle}>Stories that shape with your choices</Text>
+        <Text style={styles.ornament}>✦ ✦ ✦</Text>
+        <Text style={styles.title}>Warhammer{'\n'}Roleplay</Text>
+        <Text style={styles.subtitle}>
+          In a world of grim peril and dark adventure,{'\n'}every choice may be your last.
+        </Text>
+        <View style={styles.divider} />
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('StorySelect')}
-          activeOpacity={0.8}
+          activeOpacity={0.7}
         >
-          <Text style={styles.buttonText}>Begin Adventure</Text>
+          <Text style={styles.buttonText}>✦ Begin Your Tale ✦</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -34,39 +39,55 @@ export function HomeScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: '#1A1A2E',
+    backgroundColor: Colors.background,
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
-    gap: 24,
+    gap: 20,
+  },
+  ornament: {
+    color: Colors.border,
+    fontSize: 14,
+    letterSpacing: 8,
   },
   title: {
-    color: '#FFC107',
-    fontSize: 42,
-    fontWeight: '800',
+    fontFamily: Fonts.title,
+    color: Colors.titleText,
+    fontSize: 48,
     textAlign: 'center',
-    letterSpacing: 1,
-    lineHeight: 50,
+    lineHeight: 58,
+    letterSpacing: 2,
   },
   subtitle: {
-    color: 'rgba(255,255,255,0.5)',
+    fontFamily: Fonts.body,
+    color: Colors.bodyText,
     fontSize: 16,
     textAlign: 'center',
+    lineHeight: 26,
+    fontStyle: 'italic',
+  },
+  divider: {
+    width: 120,
+    height: 1,
+    backgroundColor: Colors.border,
+    marginVertical: 8,
   },
   button: {
-    backgroundColor: '#FFC107',
-    borderRadius: 10,
-    paddingVertical: 16,
-    paddingHorizontal: 48,
-    marginTop: 16,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderStyle: 'dashed',
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    backgroundColor: Colors.card,
   },
   buttonText: {
-    color: '#1A1A2E',
-    fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+    fontFamily: Fonts.bodySemiBold,
+    color: Colors.titleText,
+    fontSize: 16,
+    letterSpacing: 2,
+    textAlign: 'center',
   },
 });

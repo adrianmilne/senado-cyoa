@@ -7,8 +7,14 @@
   "coverImage": "",
   "startScene": "start",
   "stateSchema": {
-    "health": { "initial": 100, "min": 0, "max": 100 },
-    "gold": { "initial": 10 },
+    "health": {
+      "initial": 100,
+      "min": 0,
+      "max": 100
+    },
+    "gold": {
+      "initial": 10
+    },
     "flags": {
       "flag_a": false,
       "flag_b": false
@@ -28,18 +34,35 @@
           "nextScene": "item_scene",
           "conditions": [],
           "effects": [
-            { "type": "set_flag", "key": "flag_a", "value": true }
+            {
+              "type": "set_flag",
+              "key": "flag_a",
+              "value": true
+            }
           ]
         }
-      ]
+      ],
+      "image": {
+        "file": "images/start.png",
+        "altText": "Start",
+        "position": "top"
+      }
     },
     "item_scene": {
       "id": "item_scene",
       "type": "discovery",
       "title": "Item Scene",
       "text": "You find a knife",
+      "imagePrompt": {
+        "subject": "A worn hunting knife lying on dirt ground, blade dulled with age",
+        "mood": "desolate",
+        "shot": "close"
+      },
       "effectsOnEntry": [
-        { "type": "add_item", "key": "hunting_knife" }
+        {
+          "type": "add_item",
+          "key": "hunting_knife"
+        }
       ],
       "choices": [
         {
@@ -49,13 +72,23 @@
           "conditions": [],
           "effects": []
         }
-      ]
+      ],
+      "image": {
+        "file": "images/item_scene.png",
+        "altText": "Item Scene",
+        "position": "top"
+      }
     },
     "conditional_scene": {
       "id": "conditional_scene",
       "type": "normal",
       "title": "Conditional Scene",
       "text": "A locked door",
+      "imagePrompt": {
+        "subject": "Heavy iron-bound wooden door set into a crumbling stone wall, rusted lock",
+        "mood": "oppressive",
+        "shot": "portrait"
+      },
       "effectsOnEntry": [],
       "choices": [
         {
@@ -63,7 +96,10 @@
           "text": "Use the knife",
           "nextScene": "good_ending",
           "conditions": [
-            { "type": "has_item", "key": "hunting_knife" }
+            {
+              "type": "has_item",
+              "key": "hunting_knife"
+            }
           ],
           "effects": [],
           "hiddenIfConditionFails": true
@@ -74,18 +110,37 @@
           "nextScene": "combat_scene",
           "conditions": [],
           "effects": [
-            { "type": "modify_stat", "key": "health", "value": -30 }
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -30
+            }
           ]
         }
-      ]
+      ],
+      "image": {
+        "file": "images/conditional_scene.png",
+        "altText": "Conditional Scene",
+        "position": "top"
+      }
     },
     "combat_scene": {
       "id": "combat_scene",
       "type": "combat",
       "title": "Combat",
       "text": "You are attacked",
+      "imagePrompt": {
+        "subject": "Hooded figure lunging from shadow, blade raised, narrow stone corridor",
+        "mood": "dread",
+        "shot": "wide",
+        "exclude": "colour, bright light"
+      },
       "effectsOnEntry": [
-        { "type": "modify_stat", "key": "health", "value": -80 }
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -80
+        }
       ],
       "healthCheck": {
         "stat": "health",
@@ -109,7 +164,12 @@
       "title": "Victory",
       "text": "You win",
       "effectsOnEntry": [],
-      "choices": []
+      "choices": [],
+      "image": {
+        "file": "images/good_ending.png",
+        "altText": "Victory",
+        "position": "top"
+      }
     },
     "death_ending": {
       "id": "death_ending",
@@ -117,12 +177,22 @@
       "endingType": "death",
       "title": "Death",
       "text": "You die",
+      "imagePrompt": {
+        "subject": "Figure collapsed on cold stone floor, darkness closing in from edges",
+        "mood": "bleak",
+        "shot": "overhead"
+      },
       "effectsOnEntry": [],
       "choices": [],
       "retryOptions": {
         "allowRetry": true,
         "retryFromScene": "start",
         "retryLabel": "Try Again"
+      },
+      "image": {
+        "file": "images/death_ending.png",
+        "altText": "Death",
+        "position": "top"
       }
     }
   },
@@ -136,7 +206,7 @@
     }
   },
   "imageConfig": {
-    "basePath": "assets/stories/test_story/images/",
+    "basePath": "assets/stories/test_story/",
     "format": "png",
     "fallbackImage": ""
   }
