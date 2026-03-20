@@ -21,6 +21,7 @@ export interface Story {
   description: string;
   coverImage: string;
   startScene: string;
+  defaultDeathSceneId?: string;
   metadata?: {
     estimatedPlaytimeMinutes: number;
     difficulty: string;

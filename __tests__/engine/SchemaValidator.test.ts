@@ -7,6 +7,8 @@ const testStory: Story = require('../../assets/stories/test_story/story.json') a
 const forestStory: Story = require('../../assets/stories/forest_of_shadows/story.json') as Story;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const mistStory: Story = require('../../assets/stories/the_mists_of_bravora/story.json') as Story;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const beastStory: Story = require('../../assets/stories/the_beast_of_blackridge/story.json') as Story;
 
 function cloneStory(s: Story): Story {
   return JSON.parse(JSON.stringify(s)) as Story;
@@ -23,6 +25,10 @@ describe('SchemaValidator', () => {
 
   test('mist_of_bravora passes validation', () => {
     expect(isValidStory(mistStory)).toBe(true);
+  });
+
+  test('beast_of_blackridge passes validation', () => {
+    expect(isValidStory(beastStory)).toBe(true);
   });
 
   test('missing id is caught', () => {

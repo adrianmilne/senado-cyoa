@@ -6,6 +6,7 @@
   "description": "A short story that exercises all engine features.",
   "coverImage": "",
   "startScene": "start",
+  "defaultDeathSceneId": "death_ending",
   "stateSchema": {
     "health": {
       "initial": 100,

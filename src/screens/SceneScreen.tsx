@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   sceneTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 24,
     marginBottom: 12,
     gap: 8,
   },

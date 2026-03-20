@@ -4,11 +4,14 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  ImageBackground,
   SafeAreaView,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { Colors, Fonts } from '../theme';
+
+const BG_IMAGE = require('../../assets/stories/forest_of_shadows/images/forest_entrance.png');
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
@@ -16,30 +19,39 @@ type Props = {
 
 export function HomeScreen({ navigation }: Props) {
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
-        <Text style={styles.ornament}>✦ ✦ ✦</Text>
-        <Text style={styles.title}>Warhammer{'\n'}Roleplay</Text>
-        <Text style={styles.subtitle}>
-          In a world of grim peril and dark adventure,{'\n'}every choice may be your last.
-        </Text>
-        <View style={styles.divider} />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('StorySelect')}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.buttonText}>✦ Begin Your Tale ✦</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <ImageBackground source={BG_IMAGE} style={styles.background} resizeMode="cover">
+      <View style={styles.overlay} />
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.container}>
+          <Text style={styles.ornament}>✦ ✦ ✦</Text>
+          <Text style={styles.title}>{'Alkainos\nAdventures'}</Text>
+          <Text style={styles.subtitle}>
+            In a world of grim peril and dark adventure,{'\n'}every choice may be your last.
+          </Text>
+          <View style={styles.divider} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('StorySelect')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.buttonText}>✦ Begin Your Tale ✦</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+  },
   safe: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
   container: {
     flex: 1,
@@ -56,9 +68,9 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Fonts.title,
     color: Colors.titleText,
-    fontSize: 48,
+    fontSize: 52,
     textAlign: 'center',
-    lineHeight: 58,
+    lineHeight: 62,
     letterSpacing: 2,
   },
   subtitle: {

@@ -26,6 +26,14 @@ export function validateStory(story: Story): ValidationError[] {
     });
   }
 
+  // Validate defaultDeathSceneId exists if set
+  if (story.defaultDeathSceneId && !story.scenes[story.defaultDeathSceneId]) {
+    errors.push({
+      field: 'defaultDeathSceneId',
+      message: `defaultDeathSceneId "${story.defaultDeathSceneId}" does not exist in scenes`,
+    });
+  }
+
   // Validate all scene references
   for (const [sceneId, scene] of Object.entries(story.scenes)) {
     for (const choice of scene.choices) {

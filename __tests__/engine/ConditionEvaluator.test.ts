@@ -67,8 +67,20 @@ describe('ConditionEvaluator', () => {
     expect(evaluateCondition({ type: 'stat_less_than', key: 'health', value: 70 }, baseState)).toBe(false);
   });
 
-  test('stat_greater_than — works for gold', () => {
+  test('stat_greater_than — true when gold > threshold', () => {
     expect(evaluateCondition({ type: 'stat_greater_than', key: 'gold', value: 10 }, baseState)).toBe(true);
+  });
+
+  test('stat_greater_than — false when gold <= threshold (insufficient funds)', () => {
+    expect(evaluateCondition({ type: 'stat_greater_than', key: 'gold', value: 20 }, baseState)).toBe(false);
+  });
+
+  test('stat_less_than — true when gold < threshold', () => {
+    expect(evaluateCondition({ type: 'stat_less_than', key: 'gold', value: 50 }, baseState)).toBe(true);
+  });
+
+  test('stat_less_than — false when gold >= threshold', () => {
+    expect(evaluateCondition({ type: 'stat_less_than', key: 'gold', value: 20 }, baseState)).toBe(false);
   });
 
   test('scene_visited — true when scene was visited', () => {

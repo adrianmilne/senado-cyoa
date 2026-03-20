@@ -1,0 +1,1504 @@
+{
+  "id": "beast_of_blackridge",
+  "title": "The Beast of Blackridge",
+  "author": "CYOA Engine",
+  "version": "1.0.0",
+  "description": "A great beast descends from the high woods and crags above Blackridge, slaughtering livestock and villagers alike. With a rich bounty offered for its death, you set out into the forest and mountains to hunt it down.",
+  "coverImage": "",
+  "startScene": "blackridge_village",
+  "defaultDeathSceneId": "slain_by_the_beast",
+  "stateSchema": {
+    "health": {
+      "initial": 100,
+      "min": 0,
+      "max": 100
+    },
+    "gold": {
+      "initial": 15
+    },
+    "flags": {
+      "learned_beast_clue": false,
+      "found_hidden_stash": false,
+      "wounded_beast": false,
+      "met_trapper": false,
+      "found_lair": false,
+      "has_rope": false,
+      "has_bait_meat": false,
+      "has_throwing_knife": false,
+      "has_hunting_spear": false,
+      "has_steel_sword": false,
+      "bought_heavy_weapon": false
+    }
+  },
+  "scenes": {
+    "blackridge_village": {
+      "id": "blackridge_village",
+      "type": "normal",
+      "title": "Blackridge Village",
+      "text": "You arrive in Blackridge at dusk, a small mountain village huddled beneath the shadow of dark pines and broken crags. Fear hangs over the square. The village elder steps forward and tells you of the beast that comes down from the heights to kill sheep, cattle, and sometimes people. Two hunters have already vanished. He offers a bounty of eighty crowns to whoever ends the terror. You have little coin and fewer prospects. The hunt is too rich to refuse.",
+      "imagePrompt": {
+        "subject": "Small mountain village square of timber and stone cottages beneath dark pine-covered slopes, anxious villagers gathered near a weathered elder",
+        "mood": "tense",
+        "shot": "wide",
+        "exclude": "sunshine, crowds, banners"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "visit_village_merchant",
+          "text": "Visit the village merchant",
+          "nextScene": "village_merchant",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "speak_to_hunters",
+          "text": "Speak to the hunters by the fire",
+          "nextScene": "hunters_fire",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "leave_for_the_woods",
+          "text": "Head straight for the woods",
+          "nextScene": "forest_edge",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "refuse_the_hunt",
+          "text": "Refuse the hunt and leave Blackridge behind",
+          "nextScene": "turned_back",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/blackridge_village.png",
+        "altText": "Blackridge Village",
+        "position": "top"
+      }
+    },
+    "village_merchant": {
+      "id": "village_merchant",
+      "type": "discovery",
+      "title": "The Village Merchant",
+      "text": "A leathery old trader has laid out practical goods beneath a patched canvas awning: rope, bait meat, knives, and bottles of bitter tonic. He eyes you up and down and names his prices without shame.",
+      "imagePrompt": {
+        "subject": "Rough village trader stall with ropes, dried meat, bottles and knives laid out under a canvas awning in a cold mountain settlement",
+        "mood": "grounded",
+        "shot": "medium",
+        "exclude": "luxury goods, bright colours, large city elements"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "buy_rope",
+          "text": "Buy rope for 8 gold",
+          "nextScene": "village_merchant",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 8
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -8
+            },
+            {
+              "type": "set_flag",
+              "key": "has_rope",
+              "value": true
+            },
+            {
+              "type": "add_item",
+              "key": "rope"
+            }
+          ]
+        },
+        {
+          "id": "buy_bait_meat",
+          "text": "Buy bait meat for 6 gold",
+          "nextScene": "village_merchant",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 6
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -6
+            },
+            {
+              "type": "set_flag",
+              "key": "has_bait_meat",
+              "value": true
+            },
+            {
+              "type": "add_item",
+              "key": "bait_meat"
+            }
+          ]
+        },
+        {
+          "id": "buy_throwing_knife",
+          "text": "Buy a throwing knife for 12 gold",
+          "nextScene": "village_merchant",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 12
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -12
+            },
+            {
+              "type": "set_flag",
+              "key": "has_throwing_knife",
+              "value": true
+            },
+            {
+              "type": "add_item",
+              "key": "throwing_knife"
+            }
+          ]
+        },
+        {
+          "id": "buy_tonic",
+          "text": "Drink a bitter tonic for 10 gold and restore 25 health",
+          "nextScene": "village_merchant",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 10
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -10
+            },
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": 25
+            }
+          ]
+        },
+        {
+          "id": "ask_about_the_hunt",
+          "text": "Ask whether anyone else has tried to kill the beast",
+          "nextScene": "hunters_fire",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "leave_merchant_for_forest",
+          "text": "Leave the village and enter the woods",
+          "nextScene": "forest_edge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/village_merchant.png",
+        "altText": "The Village Merchant",
+        "position": "top"
+      }
+    },
+    "hunters_fire": {
+      "id": "hunters_fire",
+      "type": "normal",
+      "title": "Hunters' Fire",
+      "text": "Two grim-faced hunters warm their hands at a low fire. They tell you the beast is no mindless animal. It circles traps, avoids spears, and moves between the high trees and the rocks above the forest. One of them swears it can be drawn by fresh bait, but only for a moment before it turns wild. If you wound it, it will flee uphill to its lair.",
+      "imagePrompt": {
+        "subject": "Two hard-faced hunters beside a low campfire near a woodpile, speaking in hushed tones with pine forest and mountains behind",
+        "mood": "wary",
+        "shot": "medium",
+        "exclude": "smiles, crowds, daylight warmth"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "learned_beast_clue",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "go_to_merchant_after_hunters",
+          "text": "Visit the merchant before you leave",
+          "nextScene": "village_merchant",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "enter_the_woods_after_hunters",
+          "text": "Take what you have learned and enter the woods",
+          "nextScene": "forest_edge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/hunters_fire.png",
+        "altText": "Hunters' Fire",
+        "position": "top"
+      }
+    },
+    "forest_edge": {
+      "id": "forest_edge",
+      "type": "normal",
+      "title": "Forest Edge",
+      "text": "The last cottages fall behind you. Ahead, the lower woods gather thick and dark at the feet of the mountains. Mist lingers between the trunks, and the path divides where roots break the earth. One way follows an old cart track. The other slips into deeper shadow where game trails wind between stones and bracken.",
+      "imagePrompt": {
+        "subject": "Narrow track entering dark evergreen woods at the foot of steep mountains, mist hanging between trunks and roots crossing the ground",
+        "mood": "foreboding",
+        "shot": "wide",
+        "exclude": "open sky, people, village buildings"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "take_cart_track",
+          "text": "Take the old cart track",
+          "nextScene": "bandit_ambush",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "take_game_trail",
+          "text": "Take the narrow game trail",
+          "nextScene": "wolf_hollow",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/forest_edge.png",
+        "altText": "Forest Edge",
+        "position": "top"
+      }
+    },
+    "bandit_ambush": {
+      "id": "bandit_ambush",
+      "type": "combat",
+      "title": "Bandit Ambush",
+      "text": "The old track narrows between fallen trees. Rough voices call out from both sides as armed bandits step from the brush with clubs, axes, and knives. They have no interest in the beast, only in what coin they think you carry.",
+      "imagePrompt": {
+        "subject": "Armed roadside bandits emerging from brush and fallen trees on a forest path, weapons drawn in a mountain woodland ambush",
+        "mood": "dangerous",
+        "shot": "wide",
+        "exclude": "armour polish, heroic posing, castles"
+      },
+      "effectsOnEntry": [],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "fight_bandits",
+          "text": "Fight the bandits",
+          "nextScene": "hidden_stash",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -25
+            },
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": 15
+            }
+          ]
+        },
+        {
+          "id": "bribe_bandits",
+          "text": "Throw them 10 gold and keep moving",
+          "nextScene": "blood_clearing",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 10
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -10
+            }
+          ]
+        },
+        {
+          "id": "slip_past_bandits",
+          "text": "Use your throwing knife to distract them and slip into the trees",
+          "nextScene": "blood_clearing",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_throwing_knife"
+            }
+          ],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/bandit_ambush.png",
+        "altText": "Bandit Ambush",
+        "position": "top"
+      }
+    },
+    "wolf_hollow": {
+      "id": "wolf_hollow",
+      "type": "combat",
+      "title": "Wolf Hollow",
+      "text": "You descend into a hollow where the light fades beneath thick boughs. Low growls ripple through the brush. Lean grey wolves circle between roots and stone, driven bold by hunger and the strange fear that grips the forest.",
+      "imagePrompt": {
+        "subject": "Lean grey wolves circling in a shadowy forest hollow strewn with roots and stones, eyes fixed from the darkness",
+        "mood": "predatory",
+        "shot": "wide",
+        "exclude": "fantasy monsters, snow, people holding torches"
+      },
+      "effectsOnEntry": [],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "fight_wolves",
+          "text": "Fight through the wolves",
+          "nextScene": "hidden_stash",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -15
+            }
+          ]
+        },
+        {
+          "id": "use_rope_at_wolves",
+          "text": "Use your rope to climb above them and wait them out",
+          "nextScene": "hidden_stash",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_rope"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "throw_bait_to_wolves",
+          "text": "Throw down your bait meat and move on while they tear at it",
+          "nextScene": "blood_clearing",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_bait_meat"
+            }
+          ],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/wolf_hollow.png",
+        "altText": "Wolf Hollow",
+        "position": "top"
+      }
+    },
+    "hidden_stash": {
+      "id": "hidden_stash",
+      "type": "discovery",
+      "title": "Hidden Stash",
+      "text": "Behind a tumble of roots and broken stone, you spot the remains of a hidden cache. A torn satchel lies half-buried beneath damp leaves. Inside, you find a clutch of old crowns that some outlaw clearly meant to recover later.",
+      "imagePrompt": {
+        "subject": "Small concealed bandit cache tucked beneath roots and broken stone, with a worn satchel and scattered coins in the undergrowth",
+        "mood": "secretive",
+        "shot": "close",
+        "exclude": "treasure chests, jewels, ornate objects"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "found_hidden_stash",
+          "value": true
+        },
+        {
+          "type": "modify_stat",
+          "key": "gold",
+          "value": 20
+        }
+      ],
+      "choices": [
+        {
+          "id": "continue_to_blood_clearing",
+          "text": "Push deeper into the woods",
+          "nextScene": "blood_clearing",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/hidden_stash.png",
+        "altText": "Hidden Stash",
+        "position": "top"
+      }
+    },
+    "blood_clearing": {
+      "id": "blood_clearing",
+      "type": "normal",
+      "title": "The Blood Clearing",
+      "text": "You come upon a wide clearing torn apart by violence. The ground is churned into mud. Broken saplings lean at odd angles. The remains of slaughtered livestock lie scattered in the grass, and the stink of blood hangs heavy in the air. Whatever made this mess is close.",
+      "imagePrompt": {
+        "subject": "Forest clearing torn apart by claw marks and bloodied livestock remains, churned mud and broken saplings beneath looming trees",
+        "mood": "grim",
+        "shot": "wide",
+        "exclude": "visible beast, fire, villagers"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "place_bait_and_wait",
+          "text": "Place bait in the clearing and wait for the beast",
+          "nextScene": "beast_lured",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_bait_meat"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "set_a_trap",
+          "text": "Set a crude trap among the broken saplings",
+          "nextScene": "beast_trapped",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "follow_tracks_only",
+          "text": "Ignore the clearing and follow the tracks uphill",
+          "nextScene": "mountain_ascent",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/blood_clearing.png",
+        "altText": "The Blood Clearing",
+        "position": "top"
+      }
+    },
+    "beast_lured": {
+      "id": "beast_lured",
+      "type": "combat",
+      "title": "Beast at Dusk",
+      "text": "The bait does its work. At dusk, the beast bursts from the treeline in a blur of muscle and scarred fur, larger than any wolf and heavier than a bear. You strike at it in the confusion and drive it back, but not before it tears into you. Wounded, it crashes away uphill toward the mountains.",
+      "imagePrompt": {
+        "subject": "Massive scarred beast bursting from treeline at dusk into a torn forest clearing, low and muscular like a monstrous bear-wolf hybrid",
+        "mood": "ferocious",
+        "shot": "wide",
+        "exclude": "daylight, heroic composition, extra monsters"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -30
+        },
+        {
+          "type": "set_flag",
+          "key": "wounded_beast",
+          "value": true
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "follow_wounded_beast",
+          "text": "Follow the beast's blood trail into the mountains",
+          "nextScene": "mountain_ascent",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/beast_lured.png",
+        "altText": "Beast at Dusk",
+        "position": "top"
+      }
+    },
+    "beast_trapped": {
+      "id": "beast_trapped",
+      "type": "combat",
+      "title": "The Trap Springs",
+      "text": "Your trap is crude, but the beast's fury drives it straight into the danger. It snarls as wood and cord bite into its flank. You manage to wound it before it hurls itself free and vanishes uphill. The fight costs you blood, but the beast is hurt now.",
+      "imagePrompt": {
+        "subject": "Huge scarred forest beast thrashing through a crude hunter trap in a ravaged clearing at dusk, splintered wood and flying debris around it",
+        "mood": "violent",
+        "shot": "wide",
+        "exclude": "hero pose, daylight, extra animals"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -20
+        },
+        {
+          "type": "set_flag",
+          "key": "wounded_beast",
+          "value": true
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "pursue_the_beast_uphill",
+          "text": "Pursue the beast into the mountains",
+          "nextScene": "mountain_ascent",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/beast_trapped.png",
+        "altText": "The Trap Springs",
+        "position": "top"
+      }
+    },
+    "mountain_ascent": {
+      "id": "mountain_ascent",
+      "type": "normal",
+      "title": "Mountain Ascent",
+      "text": "The trail steepens as you climb above the lower woods. The air grows colder. Smears of blood mark stones and roots where the beast passed, leading toward a broken ridge high above. The path divides again. One way clings to a narrow cliff. The other disappears into a dark cave passage. Off to one side, smoke rises from what might be a lonely shelter.",
+      "imagePrompt": {
+        "subject": "Steep mountain trail climbing above dark pines toward jagged crags, blood trail and broken stone marking the route upward",
+        "mood": "relentless",
+        "shot": "wide",
+        "exclude": "sunshine, villages, snowstorm"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "take_cliff_path",
+          "text": "Take the narrow cliff path",
+          "nextScene": "cliff_path",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "take_cave_path",
+          "text": "Take the dark cave passage",
+          "nextScene": "cave_path",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "investigate_smoke",
+          "text": "Investigate the distant smoke",
+          "nextScene": "trapper_shelter",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "abandon_hunt_in_mountains",
+          "text": "Turn back while you still can",
+          "nextScene": "turned_back",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/mountain_ascent.png",
+        "altText": "Mountain Ascent",
+        "position": "top"
+      }
+    },
+    "cliff_path": {
+      "id": "cliff_path",
+      "type": "combat",
+      "title": "Cliff Path",
+      "text": "The cliff path is little more than a ledge hacked into stone above a deep ravine. Wind claws at your cloak. Loose scree shifts beneath your boots. One bad step would end the hunt here.",
+      "imagePrompt": {
+        "subject": "Narrow cliffside path above a deep ravine with loose stones and wind-bent pines clinging to the rock face",
+        "mood": "perilous",
+        "shot": "wide",
+        "exclude": "bridges, sunshine, travellers in groups"
+      },
+      "effectsOnEntry": [],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "use_rope_on_cliff",
+          "text": "Use your rope to secure yourself and climb safely",
+          "nextScene": "bones_below_ridge",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_rope"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "force_the_climb",
+          "text": "Force your way across the ledge",
+          "nextScene": "bones_below_ridge",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -20
+            }
+          ]
+        },
+        {
+          "id": "retreat_to_shelter",
+          "text": "Retreat and seek the shelter instead",
+          "nextScene": "trapper_shelter",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/cliff_path.png",
+        "altText": "Cliff Path",
+        "position": "top"
+      }
+    },
+    "cave_path": {
+      "id": "cave_path",
+      "type": "combat",
+      "title": "Cave Path",
+      "text": "The cave swallows what little light remains. Old bones crunch beneath your boots. Farther in, desperate men emerge from the dark with rusted blades and hard eyes. Outlaws have made this place their den, and they are not eager to share it.",
+      "imagePrompt": {
+        "subject": "Dark mountain cave passage with rough stone walls, old bones, discarded packs and the hint of lurking figures deeper within",
+        "mood": "oppressive",
+        "shot": "wide",
+        "exclude": "glowing crystals, lava, ornate ruins"
+      },
+      "effectsOnEntry": [],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "fight_cave_outlaws",
+          "text": "Fight your way through the outlaws",
+          "nextScene": "trapper_shelter",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": -20
+            },
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": 10
+            }
+          ]
+        },
+        {
+          "id": "slip_past_cave_outlaws",
+          "text": "Wait in the shadows and slip past them",
+          "nextScene": "bones_below_ridge",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "search_the_side_chamber",
+          "text": "Search a side chamber before moving on",
+          "nextScene": "trapper_shelter",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": 10
+            }
+          ]
+        }
+      ],
+      "image": {
+        "file": "images/cave_path.png",
+        "altText": "Cave Path",
+        "position": "top"
+      }
+    },
+    "trapper_shelter": {
+      "id": "trapper_shelter",
+      "type": "discovery",
+      "title": "The Mountain Trapper",
+      "text": "The smoke leads you to a rough shelter built of timber, hide, and stone. An old mountain trapper watches you with guarded eyes. Spears, pelts, and iron traps hang outside his hut. When you mention the beast, he spits into the dirt and says he has seen it before. For the right price, he will part with better tools than anything sold in the village.",
+      "imagePrompt": {
+        "subject": "Isolated mountain trapper hut of timber and hide beside a rocky ledge, with spears, pelts and snares hanging outside",
+        "mood": "rugged",
+        "shot": "medium",
+        "exclude": "village elements, bright colours, warm hospitality"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "met_trapper",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "buy_hunting_spear",
+          "text": "Buy a hunting spear for 25 gold",
+          "nextScene": "trapper_shelter",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 25
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -25
+            },
+            {
+              "type": "set_flag",
+              "key": "has_hunting_spear",
+              "value": true
+            },
+            {
+              "type": "set_flag",
+              "key": "bought_heavy_weapon",
+              "value": true
+            },
+            {
+              "type": "add_item",
+              "key": "hunting_spear"
+            }
+          ]
+        },
+        {
+          "id": "buy_steel_sword",
+          "text": "Buy a steel sword for 40 gold",
+          "nextScene": "trapper_shelter",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 40
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -40
+            },
+            {
+              "type": "set_flag",
+              "key": "has_steel_sword",
+              "value": true
+            },
+            {
+              "type": "set_flag",
+              "key": "bought_heavy_weapon",
+              "value": true
+            },
+            {
+              "type": "add_item",
+              "key": "steel_sword"
+            }
+          ]
+        },
+        {
+          "id": "buy_mountain_tonic",
+          "text": "Drink a mountain tonic for 12 gold and restore 25 health",
+          "nextScene": "trapper_shelter",
+          "conditions": [
+            {
+              "type": "stat_greater_or_equal",
+              "key": "gold",
+              "value": 12
+            }
+          ],
+          "effects": [
+            {
+              "type": "modify_stat",
+              "key": "gold",
+              "value": -12
+            },
+            {
+              "type": "modify_stat",
+              "key": "health",
+              "value": 25
+            }
+          ]
+        },
+        {
+          "id": "ask_trapper_for_advice",
+          "text": "Ask the trapper how best to kill the beast",
+          "nextScene": "trapper_warning",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "leave_for_the_ridge",
+          "text": "Leave the shelter and continue the hunt",
+          "nextScene": "bones_below_ridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/trapper_shelter.png",
+        "altText": "The Mountain Trapper",
+        "position": "top"
+      }
+    },
+    "trapper_warning": {
+      "id": "trapper_warning",
+      "type": "normal",
+      "title": "The Trapper's Warning",
+      "text": "The trapper unrolls a crude hand-drawn map and taps a broken ridge above the tree line. 'That is where it holes up,' he says. 'If you wounded it below, you have a chance. If not, it will come at you like a storm. A spear keeps distance. A good sword helps if it gets in close. Go in tired, and you will not come out.'",
+      "imagePrompt": {
+        "subject": "Weathered mountain trapper inside a dim hut pointing to a crude hand-drawn map on a table lit by a single lantern",
+        "mood": "stern",
+        "shot": "medium",
+        "exclude": "magical glow, luxury interiors, multiple people"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "leave_trapper_for_lair",
+          "text": "Follow the trapper's directions to the ridge",
+          "nextScene": "bones_below_ridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/trapper_warning.png",
+        "altText": "The Trapper's Warning",
+        "position": "top"
+      }
+    },
+    "bones_below_ridge": {
+      "id": "bones_below_ridge",
+      "type": "discovery",
+      "title": "Bones Below the Ridge",
+      "text": "Beneath the broken ridge, you find a bleak hollow littered with old bones, torn hides, and the remnants of past kills. A dark cave mouth opens ahead. The smell that spills out leaves no doubt. You have found the lair.",
+      "imagePrompt": {
+        "subject": "Bleak rocky hollow beneath a broken mountain ridge strewn with old bones, torn hides and a dark cave mouth",
+        "mood": "ominous",
+        "shot": "wide",
+        "exclude": "visible beast, torches, people"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "set_flag",
+          "key": "found_lair",
+          "value": true
+        }
+      ],
+      "choices": [
+        {
+          "id": "enter_the_lair",
+          "text": "Enter the lair",
+          "nextScene": "beast_lair",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "lose_your_nerve",
+          "text": "Lose your nerve and turn back",
+          "nextScene": "turned_back",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/bones_below_ridge.png",
+        "altText": "Bones Below the Ridge",
+        "position": "top"
+      }
+    },
+    "beast_lair": {
+      "id": "beast_lair",
+      "type": "normal",
+      "title": "The Beast's Lair",
+      "text": "The cave narrows, then opens into a deep den stinking of blood and wet fur. Bones lie everywhere. In the darkness ahead, something massive shifts and breathes. The beast knows you are here. This ends now.",
+      "imagePrompt": {
+        "subject": "Deep beast den inside a mountain cave, scattered bones and old kills across the floor, a huge shadowed shape stirring in darkness",
+        "mood": "dread",
+        "shot": "wide",
+        "exclude": "treasure hoard, firelight, other creatures"
+      },
+      "effectsOnEntry": [],
+      "choices": [
+        {
+          "id": "attack_with_no_special_weapon",
+          "text": "Face the beast with whatever strength you have left",
+          "nextScene": "final_battle_unarmed",
+          "conditions": [],
+          "effects": []
+        },
+        {
+          "id": "attack_with_wounded_opening",
+          "text": "Press the attack while the wounded beast is still weakened",
+          "nextScene": "final_battle_wounded",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "wounded_beast"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "throw_knife_then_charge",
+          "text": "Hurl your throwing knife and charge in after it",
+          "nextScene": "final_battle_knife",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_throwing_knife"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "use_spear_in_lair",
+          "text": "Set your hunting spear and meet its charge",
+          "nextScene": "final_battle_spear",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_hunting_spear"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "use_steel_sword_in_lair",
+          "text": "Draw your steel sword and close with the beast",
+          "nextScene": "final_battle_sword",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_steel_sword"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "use_knife_on_wounded_beast",
+          "text": "Strike the wounded beast with a throwing knife first",
+          "nextScene": "final_battle_knife_wounded",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_throwing_knife"
+            },
+            {
+              "type": "flag_is_true",
+              "key": "wounded_beast"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "use_spear_on_wounded_beast",
+          "text": "Use your hunting spear against the wounded beast",
+          "nextScene": "final_battle_spear_wounded",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_hunting_spear"
+            },
+            {
+              "type": "flag_is_true",
+              "key": "wounded_beast"
+            }
+          ],
+          "effects": []
+        },
+        {
+          "id": "use_sword_on_wounded_beast",
+          "text": "Use your steel sword against the wounded beast",
+          "nextScene": "final_battle_sword_wounded",
+          "conditions": [
+            {
+              "type": "flag_is_true",
+              "key": "has_steel_sword"
+            },
+            {
+              "type": "flag_is_true",
+              "key": "wounded_beast"
+            }
+          ],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/beast_lair.png",
+        "altText": "The Beast's Lair",
+        "position": "top"
+      }
+    },
+    "final_battle_unarmed": {
+      "id": "final_battle_unarmed",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "You meet the beast head-on in the dark, armed only with nerve and whatever ordinary steel you still carry. It crashes into you like a falling tree. Claws and fangs tear at you as you struggle for a killing strike.",
+      "imagePrompt": {
+        "subject": "Brutal close-quarters fight inside a dark cave between a lone hunter and a massive scarred beast rearing amid dust and bone",
+        "mood": "brutal",
+        "shot": "wide",
+        "exclude": "heroic glow, spectators, ornate weapons"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -60
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_beast_unarmed",
+          "text": "Drive home the killing blow",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_unarmed.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_wounded": {
+      "id": "final_battle_wounded",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "The beast is still bleeding from your earlier wound, and that weakness gives you one narrow chance. Even so, the fight is savage. It hurls itself at you in blind fury, and you pay dearly for every step you take toward the kill.",
+      "imagePrompt": {
+        "subject": "Wounded massive beast fighting a lone hunter inside a dark cave, blood on fur and bones scattered underfoot",
+        "mood": "savage",
+        "shot": "wide",
+        "exclude": "hero pose, torchlight, spectators"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -50
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_wounded_beast",
+          "text": "Finish the beast while it staggers",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_wounded.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_knife": {
+      "id": "final_battle_knife",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "Your throwing knife strikes first and buys you a heartbeat of advantage. It is not enough to stop the beast's charge, but it throws off its timing and keeps its jaws from your throat as the fight turns desperate.",
+      "imagePrompt": {
+        "subject": "Hunter hurling a knife at a charging scarred beast inside a dark cave, dust rising from the cave floor and bones scattered nearby",
+        "mood": "violent",
+        "shot": "wide",
+        "exclude": "glow effects, spectators, ornate armour"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -50
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_beast_with_knife_opening",
+          "text": "Drive in and finish the beast",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_knife.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_knife_wounded": {
+      "id": "final_battle_knife_wounded",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "Your knife hits a beast already weakened by blood loss. Its first rush falters, and that single broken moment is enough to shift the balance. The kill is still ugly and close, but far less hopeless than it might have been.",
+      "imagePrompt": {
+        "subject": "Wounded scarred beast recoiling as a hunter's thrown knife strikes inside a dark bone-strewn cave",
+        "mood": "tense",
+        "shot": "wide",
+        "exclude": "magic effects, spectators, bright light"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -40
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_wounded_beast_with_knife",
+          "text": "Press your advantage and end it",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_knife_wounded.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_spear": {
+      "id": "final_battle_spear",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "You brace the hunting spear and meet the beast's charge with cold resolve. The reach of the weapon saves you from the worst of the first impact, though the force of the fight still leaves you bruised and bloodied before the beast finally falls.",
+      "imagePrompt": {
+        "subject": "Hunter bracing a hunting spear against the charge of a massive scarred beast inside a dark cave filled with bones",
+        "mood": "heroic",
+        "shot": "wide",
+        "exclude": "glowing weapons, spectators, ornate armour"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -40
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_beast_with_spear",
+          "text": "Drive the spear home",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_spear.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_spear_wounded": {
+      "id": "final_battle_spear_wounded",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "The beast is wounded, and your spear keeps it at the edge of killing distance. The battle is still vicious, but now every stagger in its footing and every burst of pain in its flank works in your favour.",
+      "imagePrompt": {
+        "subject": "Wounded beast impaled on a hunter's spear inside a dark cave, cave dust and bones scattered across the floor",
+        "mood": "grim",
+        "shot": "wide",
+        "exclude": "magic glow, spectators, bright colours"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -30
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_wounded_beast_with_spear",
+          "text": "Finish the beast with the spear",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_spear_wounded.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_sword": {
+      "id": "final_battle_sword",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "The steel sword is the best weapon you could have carried into this cave. It does not make the fight easy, but its weight and edge turn desperate defence into hard-earned control. Even so, the beast leaves its mark on you before it dies.",
+      "imagePrompt": {
+        "subject": "Hunter with a steel sword fighting a massive scarred beast in a dark cave with bones and torn hides on the ground",
+        "mood": "brutal",
+        "shot": "wide",
+        "exclude": "ornate armour, glowing swords, spectators"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -30
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_beast_with_sword",
+          "text": "Cut the beast down",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_sword.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "final_battle_sword_wounded": {
+      "id": "final_battle_sword_wounded",
+      "type": "combat",
+      "title": "Final Battle",
+      "text": "Armed with steel and facing a beast already weakened, you fight with the best chance any hunter could hope for. The cave rings with snarls and steel on bone. When it is done, the monster lies still and you remain standing.",
+      "imagePrompt": {
+        "subject": "Wounded massive beast collapsing before a hunter with a steel sword inside a dark cave scattered with bones and torn hides",
+        "mood": "triumphant",
+        "shot": "wide",
+        "exclude": "royal imagery, spectators, bright light"
+      },
+      "effectsOnEntry": [
+        {
+          "type": "modify_stat",
+          "key": "health",
+          "value": -20
+        }
+      ],
+      "healthCheck": {
+        "stat": "health",
+        "threshold": 0,
+        "failScene": "slain_by_the_beast"
+      },
+      "choices": [
+        {
+          "id": "kill_wounded_beast_with_sword",
+          "text": "Deliver the final stroke",
+          "nextScene": "victory_at_blackridge",
+          "conditions": [],
+          "effects": []
+        }
+      ],
+      "image": {
+        "file": "images/final_battle_sword_wounded.png",
+        "altText": "Final Battle",
+        "position": "top"
+      }
+    },
+    "victory_at_blackridge": {
+      "id": "victory_at_blackridge",
+      "type": "ending",
+      "endingType": "good",
+      "title": "Victory at Blackridge",
+      "text": "You return to Blackridge at dawn with proof of the kill. Word spreads before you reach the square. Relief floods the village. The elder pays the promised bounty, and for the first time in many days, the people of Blackridge breathe easily. You have earned gold, reputation, and the knowledge that the road above the village is safe again.",
+      "imagePrompt": {
+        "subject": "Worn hunter returning to a mountain village at dawn carrying proof of a slain beast as relieved villagers gather near timber houses",
+        "mood": "triumphant",
+        "shot": "wide",
+        "exclude": "parade, royal court, bright festival colours"
+      },
+      "effectsOnEntry": [],
+      "choices": [],
+      "image": {
+        "file": "images/victory_at_blackridge.png",
+        "altText": "Victory at Blackridge",
+        "position": "top"
+      }
+    },
+    "turned_back": {
+      "id": "turned_back",
+      "type": "ending",
+      "endingType": "neutral",
+      "title": "Turned Back",
+      "text": "In the end, you choose life over glory and leave the hunt unfinished. The road out of Blackridge is cold and lonely. Behind you, the village remains trapped beneath the fear of claws in the dark. Perhaps someone else will take the bounty. Perhaps no one will.",
+      "imagePrompt": {
+        "subject": "Lone traveller leaving a mountain village by a muddy road while dark peaks loom behind and villagers watch in disappointment",
+        "mood": "bleak",
+        "shot": "wide",
+        "exclude": "battle, crowds, sunshine"
+      },
+      "effectsOnEntry": [],
+      "choices": [],
+      "image": {
+        "file": "images/turned_back.png",
+        "altText": "Turned Back",
+        "position": "top"
+      }
+    },
+    "slain_by_the_beast": {
+      "id": "slain_by_the_beast",
+      "type": "ending",
+      "endingType": "death",
+      "title": "Slain by the Beast",
+      "text": "You fought as hard as any hunter could, but the mountains keep their monster. Whether in the forest, on the heights, or in the darkness of its lair, the beast leaves you broken among the stones and bones of all who failed before you.",
+      "imagePrompt": {
+        "subject": "A fallen hunter in darkness beneath the shadow of a huge beast, cave floor scattered with bones and torn gear",
+        "mood": "fatal",
+        "shot": "medium",
+        "exclude": "gore, bright light, other people"
+      },
+      "effectsOnEntry": [],
+      "choices": [],
+      "retryOptions": {
+        "allowRetry": true,
+        "retryFromScene": "blackridge_village",
+        "retryLabel": "Hunt Again"
+      },
+      "image": {
+        "file": "images/slain_by_the_beast.png",
+        "altText": "Slain by the Beast",
+        "position": "top"
+      }
+    }
+  },
+  "itemsRegistry": {
+    "rope": {
+      "id": "rope",
+      "displayName": "Rope",
+      "description": "A sturdy coil of rope, useful for climbing and crossing dangerous ground.",
+      "image": "",
+      "stackable": false
+    },
+    "bait_meat": {
+      "id": "bait_meat",
+      "displayName": "Bait Meat",
+      "description": "Fresh bloody meat that may lure hungry beasts or distract wolves.",
+      "image": "",
+      "stackable": false
+    },
+    "throwing_knife": {
+      "id": "throwing_knife",
+      "displayName": "Throwing Knife",
+      "description": "A balanced knife that can buy you a crucial opening in a fight.",
+      "image": "",
+      "stackable": false
+    },
+    "hunting_spear": {
+      "id": "hunting_spear",
+      "displayName": "Hunting Spear",
+      "description": "A heavy spear designed to meet the charge of large game at a safer distance.",
+      "image": "",
+      "stackable": false
+    },
+    "steel_sword": {
+      "id": "steel_sword",
+      "displayName": "Steel Sword",
+      "description": "A well-made blade with enough reach and weight to stand against the beast.",
+      "image": "",
+      "stackable": false
+    }
+  },
+  "imageConfig": {
+    "basePath": "assets/stories/the_beast_of_blackridge/",
+    "format": "png",
+    "fallbackImage": ""
+  }
+}

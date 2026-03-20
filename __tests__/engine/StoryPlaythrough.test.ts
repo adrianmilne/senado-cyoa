@@ -1,6 +1,7 @@
 import { applyEffects } from '../../src/engine/EffectProcessor';
 import { evaluateConditions } from '../../src/engine/ConditionEvaluator';
 import { Story, GameState, Scene } from '../../src/models';
+import { store, startStory, makeChoice as makeChoiceAction, retryFromScene } from '../../src/engine/StateManager';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const testStory: Story = require('../../assets/stories/test_story/story.json') as Story;
@@ -35,6 +36,21 @@ function applyEntryAndHealthCheck(
   return { state: s, redirected: null };
 }
 
+function deathTransition(gs: GameState, story: Story): GameState | null {
+  const deathSceneId = story.defaultDeathSceneId;
+  if (!deathSceneId || !story.scenes[deathSceneId]) return null;
+  if (story.scenes[gs.currentSceneId]?.type === 'ending') return null;
+  const deathScene = story.scenes[deathSceneId];
+  const next = applyEffects(deathScene.effectsOnEntry, gs);
+  return {
+    ...next,
+    currentSceneId: deathSceneId,
+    visitedScenes: next.visitedScenes.includes(deathSceneId)
+      ? next.visitedScenes
+      : [...next.visitedScenes, deathSceneId],
+  };
+}
+
 function makeChoice(story: Story, gs: GameState, choiceId: string): GameState {
   const scene = story.scenes[gs.currentSceneId];
   const choice = scene.choices.find(c => c.id === choiceId)!;
@@ -42,13 +58,24 @@ function makeChoice(story: Story, gs: GameState, choiceId: string): GameState {
   expect(evaluateConditions(choice.conditions, gs)).toBe(true);
 
   let next = applyEffects(choice.effects, gs);
+
+  // Global death check after choice effects
+  if (next.health <= 0) {
+    return deathTransition(next, story) ?? next;
+  }
+
   const nextScene = story.scenes[choice.nextScene];
   next = {
     ...next,
     currentSceneId: choice.nextScene,
     visitedScenes: [...next.visitedScenes, choice.nextScene],
   };
-  const { state } = applyEntryAndHealthCheck(nextScene, next, story);
+  const { state, redirected } = applyEntryAndHealthCheck(nextScene, next, story);
+
+  // Global death check after entry effects (if healthCheck didn't already redirect)
+  if (!redirected && state.health <= 0) {
+    return deathTransition(state, story) ?? state;
+  }
   return state;
 }
 
@@ -107,6 +134,103 @@ describe('test_story — combat path to death ending', () => {
     const deathScene = testStory.scenes.death_ending;
     expect(deathScene.retryOptions?.allowRetry).toBe(true);
     expect(deathScene.retryOptions?.retryFromScene).toBe('start');
+  });
+});
+
+describe('global death redirect — defaultDeathSceneId', () => {
+  const miniStory: Story = {
+    id: 'mini',
+    title: 'Mini',
+    author: 'Test',
+    version: '1.0.0',
+    description: '',
+    coverImage: '',
+    startScene: 'start',
+    defaultDeathSceneId: 'dead',
+    stateSchema: { health: { initial: 20, min: 0, max: 100 }, gold: { initial: 0 }, flags: {} },
+    scenes: {
+      start: {
+        id: 'start', type: 'normal', title: 'Start', text: '',
+        effectsOnEntry: [], choices: [
+          { id: 'to_trap', text: 'Go', nextScene: 'trap', conditions: [], effects: [] },
+          { id: 'to_lethal', text: 'Lethal', nextScene: 'normal_scene', conditions: [],
+            effects: [{ type: 'modify_stat', key: 'health', value: -100 }] },
+        ],
+      },
+      trap: {
+        id: 'trap', type: 'normal', title: 'Trap', text: '',
+        effectsOnEntry: [{ type: 'modify_stat', key: 'health', value: -100 }],
+        choices: [],
+      },
+      normal_scene: {
+        id: 'normal_scene', type: 'normal', title: 'Normal', text: '',
+        effectsOnEntry: [], choices: [],
+      },
+      dead: {
+        id: 'dead', type: 'ending', endingType: 'death', title: 'Dead', text: '',
+        effectsOnEntry: [], choices: [],
+      },
+    },
+    itemsRegistry: {},
+    imageConfig: { basePath: '', format: 'png', fallbackImage: '' },
+  };
+
+  test('entry effects on a normal scene that drain health to 0 redirect to defaultDeathSceneId', () => {
+    const gs = buildInitialState(miniStory);
+    const result = makeChoice(miniStory, gs, 'to_trap');
+    expect(result.currentSceneId).toBe('dead');
+    expect(result.health).toBe(0);
+  });
+
+  test('choice effects that drain health to 0 redirect before navigating', () => {
+    const gs = buildInitialState(miniStory);
+    const result = makeChoice(miniStory, gs, 'to_lethal');
+    // Should redirect to dead, not normal_scene
+    expect(result.currentSceneId).toBe('dead');
+    expect(result.health).toBe(0);
+  });
+
+  test('death redirect does not fire when already on an ending scene', () => {
+    // Simulate being on the dead scene already — deathTransition should return null
+    const gs = { ...buildInitialState(miniStory), currentSceneId: 'dead', health: 0 };
+    expect(deathTransition(gs, miniStory)).toBeNull();
+  });
+});
+
+describe('retryFromScene — full state reset', () => {
+  test('retryFromScene resets health, gold, flags and inventory to initial values', () => {
+    // Play through to death: start → item_scene → conditional_scene → force door (health -30) → combat (-80 entry) → dead
+    store.dispatch(startStory(testStory));
+    store.dispatch(makeChoiceAction({ choiceId: 'to_item_scene' }));
+    store.dispatch(makeChoiceAction({ choiceId: 'to_conditional_scene' }));
+    store.dispatch(makeChoiceAction({ choiceId: 'always_visible' })); // triggers death_ending
+
+    const afterDeath = store.getState().game.gameState!;
+    expect(afterDeath.currentSceneId).toBe('death_ending');
+    expect(afterDeath.health).toBe(0);
+    expect(afterDeath.inventory).toContain('hunting_knife');
+
+    // Retry from start
+    store.dispatch(retryFromScene({ sceneId: 'start' }));
+
+    const afterRetry = store.getState().game.gameState!;
+    expect(afterRetry.currentSceneId).toBe('start');
+    expect(afterRetry.health).toBe(testStory.stateSchema.health.initial);
+    expect(afterRetry.gold).toBe(testStory.stateSchema.gold.initial);
+    expect(afterRetry.inventory).toEqual([]);
+    expect(afterRetry.flags).toEqual({});
+  });
+
+  test('retryFromScene resets visitedScenes to only the retry scene', () => {
+    store.dispatch(startStory(testStory));
+    store.dispatch(makeChoiceAction({ choiceId: 'to_item_scene' }));
+    store.dispatch(makeChoiceAction({ choiceId: 'to_conditional_scene' }));
+    store.dispatch(makeChoiceAction({ choiceId: 'always_visible' }));
+
+    store.dispatch(retryFromScene({ sceneId: 'start' }));
+
+    const gs = store.getState().game.gameState!;
+    expect(gs.visitedScenes).toEqual(['start']);
   });
 });
 

@@ -4,7 +4,6 @@
 type ImageSource = number;
 
 export const STORY_IMAGES: Record<string, ImageSource> = {
-  // forest_of_shadows
   'assets/stories/forest_of_shadows/images/consumed_by_shadows.png': require('../../assets/stories/forest_of_shadows/images/consumed_by_shadows.png'),
   'assets/stories/forest_of_shadows/images/dark_path.png': require('../../assets/stories/forest_of_shadows/images/dark_path.png'),
   'assets/stories/forest_of_shadows/images/escaped_with_amulet.png': require('../../assets/stories/forest_of_shadows/images/escaped_with_amulet.png'),
@@ -16,13 +15,23 @@ export const STORY_IMAGES: Record<string, ImageSource> = {
   'assets/stories/forest_of_shadows/images/ruined_shrine.png': require('../../assets/stories/forest_of_shadows/images/ruined_shrine.png'),
   'assets/stories/forest_of_shadows/images/safe_exit.png': require('../../assets/stories/forest_of_shadows/images/safe_exit.png'),
   'assets/stories/forest_of_shadows/images/spirits_awaken.png': require('../../assets/stories/forest_of_shadows/images/spirits_awaken.png'),
-  // test_story
   'assets/stories/test_story/images/conditional_scene.png': require('../../assets/stories/test_story/images/conditional_scene.png'),
   'assets/stories/test_story/images/death_ending.png': require('../../assets/stories/test_story/images/death_ending.png'),
   'assets/stories/test_story/images/good_ending.png': require('../../assets/stories/test_story/images/good_ending.png'),
   'assets/stories/test_story/images/item_scene.png': require('../../assets/stories/test_story/images/item_scene.png'),
   'assets/stories/test_story/images/start.png': require('../../assets/stories/test_story/images/start.png'),
-  // the_mists_of_bravora
+  'assets/stories/the_beast_of_blackridge/images/blackridge_village.png': require('../../assets/stories/the_beast_of_blackridge/images/blackridge_village.png'),
+  'assets/stories/the_beast_of_blackridge/images/cave_path.png': require('../../assets/stories/the_beast_of_blackridge/images/cave_path.png'),
+  'assets/stories/the_beast_of_blackridge/images/cliff_path.png': require('../../assets/stories/the_beast_of_blackridge/images/cliff_path.png'),
+  'assets/stories/the_beast_of_blackridge/images/forest_edge.png': require('../../assets/stories/the_beast_of_blackridge/images/forest_edge.png'),
+  'assets/stories/the_beast_of_blackridge/images/hidden_stash.png': require('../../assets/stories/the_beast_of_blackridge/images/hidden_stash.png'),
+  'assets/stories/the_beast_of_blackridge/images/hunters_fire.png': require('../../assets/stories/the_beast_of_blackridge/images/hunters_fire.png'),
+  'assets/stories/the_beast_of_blackridge/images/mountain_ascent.png': require('../../assets/stories/the_beast_of_blackridge/images/mountain_ascent.png'),
+  'assets/stories/the_beast_of_blackridge/images/trapper_shelter.png': require('../../assets/stories/the_beast_of_blackridge/images/trapper_shelter.png'),
+  'assets/stories/the_beast_of_blackridge/images/trapper_warning.png': require('../../assets/stories/the_beast_of_blackridge/images/trapper_warning.png'),
+  'assets/stories/the_beast_of_blackridge/images/turned_back.png': require('../../assets/stories/the_beast_of_blackridge/images/turned_back.png'),
+  'assets/stories/the_beast_of_blackridge/images/village_merchant.png': require('../../assets/stories/the_beast_of_blackridge/images/village_merchant.png'),
+  'assets/stories/the_beast_of_blackridge/images/wolf_hollow.png': require('../../assets/stories/the_beast_of_blackridge/images/wolf_hollow.png'),
   'assets/stories/the_mists_of_bravora/images/scene_001.png': require('../../assets/stories/the_mists_of_bravora/images/scene_001.png'),
   'assets/stories/the_mists_of_bravora/images/scene_002.png': require('../../assets/stories/the_mists_of_bravora/images/scene_002.png'),
   'assets/stories/the_mists_of_bravora/images/scene_003.png': require('../../assets/stories/the_mists_of_bravora/images/scene_003.png'),

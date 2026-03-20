@@ -6,6 +6,7 @@
   "description": "Venture into the cursed Forest of Shadows and uncover its dark secrets.",
   "coverImage": "",
   "startScene": "forest_entrance",
+  "defaultDeathSceneId": "consumed_by_shadows",
   "stateSchema": {
     "health": {
       "initial": 100,

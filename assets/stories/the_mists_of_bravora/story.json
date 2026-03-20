@@ -48,6 +48,7 @@
     }
   },
   "startScene": "scene_001",
+  "defaultDeathSceneId": "scene_death",
   "scenes": {
     "scene_001": {
       "id": "scene_001",

@@ -24,6 +24,8 @@ const STORY_MODULES: Record<string, Story> = {
   forest_of_shadows: require('../../assets/stories/forest_of_shadows/story.json') as Story,
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   mist_of_bravora: require('../../assets/stories/the_mists_of_bravora/story.json') as Story,
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  beast_of_blackridge: require('../../assets/stories/the_beast_of_blackridge/story.json') as Story,
 };
 
 type Props = {

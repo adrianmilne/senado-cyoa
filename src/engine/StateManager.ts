@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, configureStore, current } from '@reduxjs/toolkit';
 import { GameState, Story, Scene } from '../models';
 import { applyEffects } from './EffectProcessor';
 import { SaveService } from '../services/SaveService';
@@ -15,14 +15,31 @@ const initialSliceState: GameSliceState = {
   isLoading: false,
 };
 
-function buildInitialGameState(story: Story): GameState {
+function freshGameState(story: Story): GameState {
   return {
     health: story.stateSchema.health.initial,
     gold: story.stateSchema.gold.initial,
     inventory: [],
-    flags: { ...story.stateSchema.flags },
+    flags: {},
     currentSceneId: story.startScene,
     visitedScenes: [],
+  };
+}
+
+function transitionToDeath(gs: GameState, story: Story): GameState | null {
+  const deathSceneId = story.defaultDeathSceneId;
+  if (!deathSceneId || !story.scenes[deathSceneId]) return null;
+  // Don't redirect if already on an ending scene (covers the death scene itself)
+  if (story.scenes[gs.currentSceneId]?.type === 'ending') return null;
+
+  const deathScene = story.scenes[deathSceneId];
+  const next = applyEffects(deathScene.effectsOnEntry, gs);
+  return {
+    ...next,
+    currentSceneId: deathSceneId,
+    visitedScenes: next.visitedScenes.includes(deathSceneId)
+      ? next.visitedScenes
+      : [...next.visitedScenes, deathSceneId],
   };
 }
 
@@ -61,7 +78,7 @@ const gameSlice = createSlice({
   reducers: {
     startStory(state, action: PayloadAction<Story>) {
       const story = action.payload;
-      const gs = buildInitialGameState(story);
+      const gs = freshGameState(story);
       const startScene = story.scenes[story.startScene];
       let gameState = applyEffects(startScene?.effectsOnEntry ?? [], gs);
       gameState = {
@@ -85,6 +102,16 @@ const gameSlice = createSlice({
       // Apply choice effects
       let gs = applyEffects(choice.effects, state.gameState);
 
+      // Death check: choice effect drained health on any scene type
+      if (gs.health <= 0) {
+        const dead = transitionToDeath(gs, state.story);
+        if (dead) {
+          state.gameState = dead;
+          if (state.story) SaveService.save(state.story.id, dead).catch(() => {});
+          return;
+        }
+      }
+
       // Navigate to next scene
       const nextScene = state.story.scenes[choice.nextScene];
       if (!nextScene) return;
@@ -97,25 +124,30 @@ const gameSlice = createSlice({
           : [...gs.visitedScenes, choice.nextScene],
       };
 
-      // Apply entry effects and health check
-      const { gameState: finalGs } = applyEntryEffectsAndHealthCheck(
+      // Apply entry effects and combat healthCheck
+      const { gameState: finalGs, redirectSceneId } = applyEntryEffectsAndHealthCheck(
         nextScene,
         gs,
         state.story,
       );
 
-      state.gameState = finalGs;
+      // Death check: entry effects drained health (only if healthCheck didn't already redirect)
+      if (!redirectSceneId && finalGs.health <= 0) {
+        state.gameState = transitionToDeath(finalGs, state.story) ?? finalGs;
+      } else {
+        state.gameState = finalGs;
+      }
 
       // Auto-save (fire and forget)
       if (state.story) {
-        SaveService.save(state.story.id, finalGs).catch(() => {});
+        SaveService.save(state.story.id, state.gameState as GameState).catch(() => {});
       }
     },
 
     restartStory(state) {
       if (!state.story) return;
-      const story = state.story;
-      const gs = buildInitialGameState(story);
+      const story = current(state.story);
+      const gs = freshGameState(story);
       const startScene = story.scenes[story.startScene];
       let gameState = applyEffects(startScene?.effectsOnEntry ?? [], gs);
       gameState = {
@@ -124,6 +156,7 @@ const gameSlice = createSlice({
         visitedScenes: [story.startScene],
       };
       state.gameState = gameState;
+      SaveService.deleteSave(story.id).catch(() => {});
     },
 
     resumeSave(state, action: PayloadAction<{ story: Story; savedState: GameState }>) {
@@ -132,18 +165,21 @@ const gameSlice = createSlice({
     },
 
     retryFromScene(state, action: PayloadAction<{ sceneId: string }>) {
-      if (!state.story || !state.gameState) return;
-      const scene = state.story.scenes[action.payload.sceneId];
+      if (!state.story) return;
+      const story = current(state.story);
+      const sceneId = action.payload.sceneId;
+      const scene = story.scenes[sceneId];
       if (!scene) return;
-      let gs = applyEffects(scene.effectsOnEntry, state.gameState);
-      gs = {
-        ...gs,
-        currentSceneId: action.payload.sceneId,
-        visitedScenes: gs.visitedScenes.includes(action.payload.sceneId)
-          ? gs.visitedScenes
-          : [...gs.visitedScenes, action.payload.sceneId],
+      // Full reset — never carry stale health/inventory/flags from a previous run
+      const gs = freshGameState(story);
+      let gameState = applyEffects(scene.effectsOnEntry, gs);
+      gameState = {
+        ...gameState,
+        currentSceneId: sceneId,
+        visitedScenes: [sceneId],
       };
-      state.gameState = gs;
+      state.gameState = gameState;
+      SaveService.deleteSave(story.id).catch(() => {});
     },
   },
 });
